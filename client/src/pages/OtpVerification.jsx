@@ -42,8 +42,14 @@ const OtpVerification = () => {
       }
       if(response.data.success){
         toast.success(response.data.message)
+       
         setdata(["","","","","",""])
-        // navigate("/verification-otp")
+        navigate("/reset-password",{
+          state : {
+            data : response.data,
+            email : location?.state?.email
+          }
+        })
       }
     } catch (error) {
       AxiosToastError(error)
@@ -69,11 +75,11 @@ const OtpVerification = () => {
 
                       <input
                       key={"otp"+ index}
-                type="text"
-                id="otp"
-                  ref={(ref) => {inputRef.current[index] = ref 
-                    return ref
-                  }}
+                      type="text"
+                      id="otp"
+                      ref={(ref) => {inputRef.current[index] = ref 
+                        return ref
+                      }}
                 value={data[index]}
                 onChange={(e)=>{
                   const value= e.target.value
