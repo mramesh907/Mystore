@@ -145,7 +145,9 @@ export async function loginController(req, res) {
 
     const accessToken = await generatedAccessToken(user._id);
     const refreshToken = await generatedRefreshToken(user._id);
-
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      lastLoginDate : new Date()
+    }); 
     const cookiesOptions = {
       httpOnly: true,
       secure: true,
@@ -261,7 +263,7 @@ export async function updateUserDetails(req, res) {
       message: 'User details updated successfully',
       error: false,
       success: true,
-      data: updateUser,
+      data: updateUser
     });
   } catch (error) {
     return res.status(500).json({
@@ -358,7 +360,10 @@ export async function verifyForgotPasswordOtp(req, res) {
     // if otp is not expired
     // otp === forgotPasswordOtp then,
     // update the password and send a success response
-
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      forgotPasswordOtp: "",
+      forgotPasswordExpiry : ""
+    });
     return res.json({
       message: 'Verify Otp Successfully',
       error: false,
@@ -474,5 +479,29 @@ export async function refreshToken(req, res) {
       error: true,
       success: false,
     });
+  }
+}
+
+// get login user details
+export async function userDetails(req,res){
+  try {
+    const userId = req.userId;
+
+    const user = await UserModel.findById(userId).select(
+      '-password -refreshToken'
+    );
+
+    return res.status(200).json({
+      message: 'User details fetched successfully',
+      error: false,
+      success: true,
+      data: user
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false
+    })
   }
 }
