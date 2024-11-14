@@ -13,20 +13,17 @@ const Footer = () => {
         <div className='flex gap-4 items-center justify-center text-2xl'>
           <a
             href='https://www.facebook.com/r.maity.921/'
-            className='hover:text-primary-100'
-          >
+            className='hover:text-primary-100'>
             <FaFacebook />
           </a>
           <a
             href='https://www.instagram.com/ramesh_m907/'
-            className='hover:text-primary-100'
-          >
+            className='hover:text-primary-100'>
             <FaInstagram />
           </a>
           <a
             href='https://www.linkedin.com/in/ramesh-maity/'
-            className='hover:text-primary-100'
-          >
+            className='hover:text-primary-100'>
             <FaLinkedin />
           </a>
         </div>

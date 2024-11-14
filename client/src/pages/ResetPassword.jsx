@@ -97,8 +97,7 @@ const ResetPassword = () => {
               />
               <div
                 onClick={() => setshowPassword((preve) => !preve)}
-                className='cursor-pointer'
-              >
+                className='cursor-pointer'>
                 {showPassword ? <FaRegEye /> : <IoMdEyeOff />}
               </div>
             </div>
@@ -119,8 +118,7 @@ const ResetPassword = () => {
               />
               <div
                 onClick={() => setshowConfirmPassword((preve) => !preve)}
-                className='cursor-pointer'
-              >
+                className='cursor-pointer'>
                 {showConfirmPassword ? <FaRegEye /> : <IoMdEyeOff />}
               </div>
             </div>
@@ -128,8 +126,7 @@ const ResetPassword = () => {
 
           <button
             disabled={!validateForm}
-            className={`${validateForm ? 'bg-green-800 hover:bg-green-700' : 'bg-gray-500'}  text-white rounded py-2 font-semibold my-3 tracking-wide`}
-          >
+            className={`${validateForm ? 'bg-green-800 hover:bg-green-700' : 'bg-gray-500'}  text-white rounded py-2 font-semibold my-3 tracking-wide`}>
             Change Password
           </button>
         </form>
@@ -138,8 +135,7 @@ const ResetPassword = () => {
           Alredy have an account ? &nbsp;
           <Link
             to={'/login'}
-            className='font-semibold text-green-700 hover:text-green-800'
-          >
+            className='font-semibold text-green-700 hover:text-green-800'>
             Login
           </Link>
         </p>
