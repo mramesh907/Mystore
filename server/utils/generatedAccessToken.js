@@ -2,9 +2,12 @@ import jwt from 'jsonwebtoken';
 
 const generatedAccessToken = async (userId) => {
   const accToken = await jwt.sign(
-    { id: userId },
+    { id: userId,
+      email: userId.email,
+      name: userId.name
+     },
     process.env.SECRET_KEY_ACCESS_TOKEN,
-    { expiresIn: '5h' }
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
   return accToken;
 };
