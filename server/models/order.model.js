@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const orderSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
     orderId: {
@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema(
       unique: true,
     },
     productId: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'product',
     },
     productDetails: {
@@ -27,7 +27,7 @@ const orderSchema = new mongoose.Schema(
       default: '',
     },
     deliveryAddress: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'address',
     },
     subTotalAmt: {

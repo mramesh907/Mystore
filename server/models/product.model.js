@@ -10,13 +10,13 @@ const productSchema = new mongoose.Schema(
     },
     category: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'category',
       },
     ],
     subCategory: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'subCategory',
       },
     ],
@@ -26,21 +26,21 @@ const productSchema = new mongoose.Schema(
     },
     stock: {
       type: Number,
-      default: null,
+      default: 0,
     },
     price: {
       type: Number,
-      default: null,
+      default: 0,
     },
     discount: {
       type: Number,
-      default: null,
+      default: 0,
     },
     description: {
       type: String,
       default: '',
     },
-    modeDetails: {
+    moreDetails: {
       type: Object,
       default: {},
     },

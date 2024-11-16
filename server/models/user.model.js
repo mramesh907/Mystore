@@ -42,19 +42,19 @@ const userSchema = new mongoose.Schema(
     },
     addressDetails: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'address',
       },
     ],
     shoppingCart: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'cartProduct',
       },
     ],
     orderHistory: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'order',
       },
     ],
