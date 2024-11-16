@@ -290,11 +290,12 @@ export async function forgotPasswordController(req, res) {
       });
     }
     const otp = generatedOtp();
-    const expireTime = new Date() + 60 * 60 * 1000; //1hr
+    const expireTime = new Date(new Date().getTime() + 2 * 60 * 1000);
+ //2 minute
 
     const update = await UserModel.findByIdAndUpdate(user._id, {
       forgotPasswordOtp: otp,
-      forgotPasswordExpiry: new Date(expireTime).toISOString(),
+      forgotPasswordExpiry: expireTime,
     });
 
     await sendEmail({
@@ -340,7 +341,7 @@ export async function verifyForgotPasswordOtp(req, res) {
       });
     }
 
-    const currentTime = new Date().toISOString();
+    const currentTime = new Date(); // Current time
     const expiryTime = user.forgotPasswordExpiry;
 
     if (currentTime > expiryTime) {
@@ -362,8 +363,8 @@ export async function verifyForgotPasswordOtp(req, res) {
     // otp === forgotPasswordOtp then,
     // update the password and send a success response
     const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
-      forgotPasswordOtp: "",
-      forgotPasswordExpiry : ""
+      forgotPasswordOtp: '',
+      forgotPasswordExpiry: '',
     });
     return res.json({
       message: 'Verify Otp Successfully',

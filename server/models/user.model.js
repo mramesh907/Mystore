@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
     },
     forgotPasswordExpiry: {
       type: Date,
-      default: '',
+      default: null,
     },
     role: {
       type: String,
