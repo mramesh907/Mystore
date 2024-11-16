@@ -15,10 +15,12 @@ app.use(cors({
 }))
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan());
+app.use(morgan('combined')); //use 'combined' for morgan deprecated error
 app.use(helmet({
     crossOriginResourcePolicy: false
 }));
+// serve static files means to save img in public folder
+// app.use(express.static('public'));
 
 const PORT =8080 || process.env.PORT;
 
@@ -28,8 +30,12 @@ app.get("/", (req, res) => {
 
 app.use('/api/user',userRouter)
 
-
+// async methods returns promise 
 connectDB().then(()=>{
+    app.on("error", (error) => {
+        console.log(error);
+        process.exit(1);
+    })
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     })

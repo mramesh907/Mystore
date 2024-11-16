@@ -213,7 +213,9 @@ export async function uploadAvatar(req, res) {
     const userId = req.userId; //comeing from the auth middleware
     const image = req.file; //multer middleware
 
-    const upload = await uploadImageCloudinary(image);
+    // if u use uploader.upload
+    // const upload = await uploadImageCloudinary(image.path);
+    const upload = await uploadImageCloudinary(image.path);
 
     const updateUser = await UserModel.updateOne(
       { _id: userId },
@@ -248,7 +250,6 @@ export async function updateUserDetails(req, res) {
       const salt = await bcryptjs.genSalt(10);
       hashPassword = await bcryptjs.hash(password, salt);
     }
-
     const updateUser = await UserModel.updateOne(
       { _id: userId },
       {
