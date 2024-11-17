@@ -215,7 +215,7 @@ export async function uploadAvatar(req, res) {
 
     // if u use uploader.upload
     // const upload = await uploadImageCloudinary(image.path);
-    const upload = await uploadImageCloudinary(image.path);
+    const upload = await uploadImageCloudinary(image);
 
     const updateUser = await UserModel.updateOne(
       { _id: userId },
