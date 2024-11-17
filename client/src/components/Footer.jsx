@@ -12,19 +12,19 @@ const Footer = () => {
         {/* Social media icons */}
         <div className='flex gap-4 items-center justify-center text-2xl'>
           <a
+            href='https://www.linkedin.com/in/ramesh-maity/'
+            className='hover:text-[#0A66C2]'>
+            <FaLinkedin />
+          </a>
+          <a
             href='https://www.facebook.com/r.maity.921/'
             className='hover:text-primary-100'>
             <FaFacebook />
           </a>
           <a
             href='https://www.instagram.com/ramesh_m907/'
-            className='hover:text-primary-100'>
+            className='hover:text-[#e1306c]'>
             <FaInstagram />
-          </a>
-          <a
-            href='https://www.linkedin.com/in/ramesh-maity/'
-            className='hover:text-primary-100'>
-            <FaLinkedin />
           </a>
         </div>
       </div>

@@ -8,6 +8,7 @@ import uploadImageCloudinary from '../utils/uploadImageCloudinary.js';
 import generatedOtp from '../utils/generatedOtp.js';
 import forgotPasswordEmailTemplate from '../utils/forgotPasswordEmailTemplate.js';
 import jwt from 'jsonwebtoken';
+import ApiError from '../utils/ApiError.js';
 
 // register controller
 export async function registerUserController(req, res) {
@@ -116,7 +117,6 @@ export async function loginController(req, res) {
     }
 
     const user = await UserModel.findOne({ email });
-
     if (!user) {
       return res.status(400).json({
         message: 'User not registered',
