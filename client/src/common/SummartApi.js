@@ -1,4 +1,3 @@
-
 export const baseURL = 'http://localhost:8080';
 
 const SummaryApi = {
@@ -53,6 +52,14 @@ const SummaryApi = {
   getCategory: {
     url: '/api/category/get-category',
     method: 'get',
+  },
+  updateCategory: {
+    url: '/api/category/update-category',
+    method: 'put',
+  },
+  deleteCategory: {
+    url: '/api/category/delete-category',
+    method: 'delete',
   },
 };
 export default SummaryApi;

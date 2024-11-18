@@ -16,6 +16,7 @@ import CategoryPage from '../pages/CategoryPage';
 import SubCategoryPage from '../pages/SubCategoryPage';
 import UploadProduct from '../pages/UploadProduct';
 import ProductAdmin from '../pages/ProductAdmin';
+import AdminPermission from '../layouts/AdminPermission'
 
 const router = createBrowserRouter(
   [
@@ -58,36 +59,52 @@ const router = createBrowserRouter(
         {
           path: 'dashboard',
           element: <Dashboard />,
-          children:[
+          children: [
             {
-              path:'profile',
-              element: <Profile/>
+              path: 'profile',
+              element: <Profile />,
             },
             {
-              path:'myorders',
-              element: <MyOrder/>
+              path: 'myorders',
+              element: <MyOrder />,
             },
             {
-              path:'address',
-              element: <Address/>
+              path: 'address',
+              element: <Address />,
             },
             {
-              path:'category',
-              element: <CategoryPage/>
+              path: 'category',
+              element: (
+                <AdminPermission>
+                  <CategoryPage />
+                </AdminPermission>
+              ),
             },
             {
-              path:'subcategory',
-              element: <SubCategoryPage/>
+              path: 'subcategory',
+              element: (
+                <AdminPermission>
+                  <SubCategoryPage />
+                </AdminPermission>
+              ),
             },
             {
-              path:'upload-product',
-              element: <UploadProduct/>
+              path: 'upload-product',
+              element: (
+                <AdminPermission>
+                  <UploadProduct />
+                </AdminPermission>
+              ),
             },
             {
-              path:'product',
-              element:<ProductAdmin/>
-            }
-          ]
+              path: 'product',
+              element: (
+                <AdminPermission>
+                  <ProductAdmin />
+                </AdminPermission>
+              ),
+            },
+          ],
         },
       ],
     },

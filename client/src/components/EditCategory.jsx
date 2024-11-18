@@ -5,10 +5,12 @@ import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummartApi';
 import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
-const UploadCategoryComponent = ({ close, fetchData }) => {
+
+const EditCategory = ({ close, fetchData, data:CategoryData }) => {
   const [data, setdata] = useState({
-    name: '',
-    image: '',
+    _id: CategoryData._id,
+    name: CategoryData.name,
+    image: CategoryData.image,
   });
   const [loading, setloading] = useState(false);
 
@@ -23,6 +25,7 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
       };
     });
   };
+
   // handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,12 +33,10 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
     try {
       setloading(true);
       const response = await Axios({
-        ...SummaryApi.addCategory,
+        ...SummaryApi.updateCategory,
         data: data,
       });
       const { data: responseData } = response;
-      console.log('responseData', responseData);
-
       if (responseData.success) {
         toast.success(responseData.message);
         close();
@@ -48,6 +49,7 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
       setloading(false);
     }
   };
+
   // handle upload category image
   const handleUploadCategoryImage = async (e) => {
     const file = e.target.files[0];
@@ -61,15 +63,16 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
     setdata((preve) => {
       return {
         ...preve,
-        image: ImageRes.data.url,
+        image: ImageRes?.data?.url,
       };
     });
   };
+  
   return (
     <section className='fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center'>
       <div className='bg-white max-w-4xl w-full p-4 rounded'>
         <div className='flex items-center justify-between'>
-          <h1 className='font-semibold'>Upload Category</h1>
+          <h1 className='font-semibold'>Edit Category</h1>
           <button onClick={close} className='w-fit block ml-auto'>
             <IoClose size={25} />
           </button>
@@ -129,7 +132,7 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
             py-2 px-4 rounded text-white
             font-semibold
             `}>
-            Add Category
+            Update Category
           </button>
         </form>
       </div>
@@ -137,4 +140,4 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
   );
 };
 
-export default UploadCategoryComponent;
+export default EditCategory;
