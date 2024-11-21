@@ -59,3 +59,38 @@ export const getSubCategoryController = async (req, res) => {
             .json({ message: error.message || error, success: false, error: true });
     }
 }
+
+export const updateSubCategoryController = async (req, res) => {
+    try {
+        const { _id ,name, image, category} = req.body
+
+        const checkSubCategory = await SubCategoryModel.findById(_id)
+
+        if(!checkSubCategory){
+            return res.status(400).json({
+                message: 'SubCategory not found',
+                success: false,
+                error: true,
+            })
+        }
+
+        const update = await SubCategoryModel.findByIdAndUpdate(_id, {
+          name,
+          image,
+          category,
+        });
+
+        return res.status(200).json({
+            message: 'SubCategory updated successfully',
+            success: true,
+            error: false,
+            data: update,
+        });
+
+    } catch (error) {
+        console.log("error from subCategory controller",error)
+        return res
+            .status(500)
+            .json({ message: error.message || error, success: false, error: true });
+    }
+}

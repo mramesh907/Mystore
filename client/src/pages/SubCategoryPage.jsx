@@ -6,6 +6,9 @@ import SummaryApi from '../common/SummartApi.js';
 import Table from '../components/Table.jsx';
 import { createColumnHelper } from '@tanstack/react-table';
 import ViewImage from '../components/ViewImage.jsx';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { IoPencilSharp } from 'react-icons/io5';
+import EditSubCategory from '../components/EditSubCategory.jsx';
 
 const SubCategoryPage = () => {
   const [addSubCategory, setaddSubCategory] = useState(false);
@@ -13,7 +16,10 @@ const SubCategoryPage = () => {
   const [loading, setLoading] = useState(false)
   const columnHelper = createColumnHelper()
   const [openViewImage, setopenViewImage] = useState("")
-
+  const [openEdit, setOpenEdit] = useState(false)
+  const [editData, seteditData] = useState({
+    _id:""
+  })
 
   const fetchSubCategory = async () => {
     try {
@@ -70,6 +76,26 @@ const SubCategoryPage = () => {
         )
       }
     }),
+    columnHelper.accessor('_id', {
+      header: 'Action',
+      cell : ({row})=>{
+        return(
+          <div className='flex items-center justify-center gap-1'>
+            <button
+            onClick={()=>{
+              setOpenEdit(true)
+              seteditData(row.original)
+            }}
+            className='text-sm border border-green-400 hover:bg-green-500 px-3 py-1 rounded'>
+              <IoPencilSharp size={20} />
+            </button>
+            <button className='text-sm border border-red-400 hover:bg-red-600 px-3 py-1 rounded'>
+              <AiOutlineDelete size={20} />
+            </button>
+          </div>
+        )
+      }
+    })
   ]
 
 
@@ -100,6 +126,14 @@ const SubCategoryPage = () => {
       {openViewImage && (
         <ViewImage url={openViewImage} close={() => setopenViewImage('')} />
       )}
+      {openEdit && 
+      <EditSubCategory
+       data={editData} 
+       close={() => {
+        setOpenEdit(false);
+        fetchSubCategory()
+        }} 
+        />}
     </section>
   );
 }
