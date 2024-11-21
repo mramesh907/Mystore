@@ -8,6 +8,9 @@ import EditCategory from '../components/EditCategory';
 import DeleteCategory from '../components/DeleteCategory';
 import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
+import { useSelector } from 'react-redux';
+
+
 const CategoryPage = () => {
   const [openUploadCategory, setopenUploadCategory] = useState(false);
   const [loading, setloading] = useState(false);
@@ -21,6 +24,13 @@ const CategoryPage = () => {
   const [deleteCategory, setdeleteCategory] = useState({
     _id:""
   })
+
+  // Not needed:-
+  // const allCategory = useSelector(state => state.product.allCategory)
+
+  // useEffect(() => {
+  //   setcategoryData(allCategory)
+  // }, [allCategory])
 
   const fetchCategory = async () => {
     try {

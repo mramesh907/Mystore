@@ -1,9 +1,107 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import UploadSubCategory from '../components/UploadSubCategory';
+import AxiosToastError from '../utils/AxiosToastError.js';
+import Axios from '../utils/Axios.js';
+import SummaryApi from '../common/SummartApi.js';
+import Table from '../components/Table.jsx';
+import { createColumnHelper } from '@tanstack/react-table';
+import ViewImage from '../components/ViewImage.jsx';
 
 const SubCategoryPage = () => {
+  const [addSubCategory, setaddSubCategory] = useState(false);
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const columnHelper = createColumnHelper()
+  const [openViewImage, setopenViewImage] = useState("")
+
+
+  const fetchSubCategory = async () => {
+    try {
+      setLoading(true)
+      const response = await Axios({
+        ...SummaryApi.getSubCategory,
+        // method: 'get',
+      })
+      const { data: responseData } = response;
+      
+      if (responseData.success) {
+        setData(responseData.data)
+      }
+    } catch (error) {
+      AxiosToastError(error)
+    }finally{
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    fetchSubCategory()
+  },[])
+  const column =[
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('image',{
+      header: 'Image',
+      cell: info =>{
+        return (
+          <div className='flex justify-center items-center'>
+            <img
+              src={info.getValue()}
+              className='w-20 pt-1 h-10 object-fill cursor-pointer'
+              alt={info.getValue()}
+              onClick={() => setopenViewImage(info.getValue())}
+            />
+          </div>
+        );
+    },
+    }),
+    columnHelper.accessor('category', {
+      header: 'Category',
+      cell: ({row})=>{
+        return(
+          <>
+            {row.original.category.map((c,index)=>{
+              return(
+                <p key={c._id+"table"} className='shadow-md px-1 inline-block'>{c.name}</p>
+              )
+            })}
+          </>
+        )
+      }
+    }),
+  ]
+
+
+
   return (
-    <div>SubCategoryPage</div>
-  )
+    <section>
+      <div className=' p-2  bg-white shadow-md flex items-center justify-between'>
+        <h2 className='font-semibold'>Sub Categories</h2>
+        <button
+          onClick={() => setaddSubCategory(true)}
+          className='text-sm border border-primary-400 hover:bg-primary-400 px-3 py-1 rounded'>
+          Add Sub Category
+        </button>
+      </div>
+
+      <div>
+        <Table data={data} column={column} />
+      </div>
+
+      {addSubCategory && (
+        <UploadSubCategory
+          close={() => {
+            setaddSubCategory(false);
+            fetchSubCategory(); // Trigger fetching after adding a subcategory
+          }}
+        />
+      )}
+      {openViewImage && (
+        <ViewImage url={openViewImage} close={() => setopenViewImage('')} />
+      )}
+    </section>
+  );
 }
 
 export default SubCategoryPage
