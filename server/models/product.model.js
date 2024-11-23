@@ -52,5 +52,13 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// create a text index on the name field of the product schema
+productSchema.index(
+  { name: 'text', description: 'text' }, // Fields to be indexed
+  {
+    weights: { name: 10, description: 5 }, // Weights for prioritizing fields
+  }
+);
+
 const ProductModel = mongoose.model('product', productSchema);
 export default ProductModel;

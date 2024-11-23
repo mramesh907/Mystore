@@ -7,7 +7,7 @@ const DeleteCategory = ({cancel,confirm,close}) => {
       <div className='bg-white p-4 w-full max-w-md rounded-md'>
         <div className='flex justify-between items-center gap-3'>
           <p className='text-xl font-semibold'>
-            Are you sure you want to delete this category?
+           Are you sure permanently delete this category
           </p>
           <button>
             <IoClose size={26} onClick={close} />

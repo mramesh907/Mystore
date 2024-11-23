@@ -42,18 +42,18 @@ const UserMenu = ({ close }) => {
       <Link
         to={'/dashboard/profile'}
         onClick={handleClose}
-        className='font-semibold hover:text-blue-300'>
+        className='font-semibold hover:text-primary-400'>
         My Account
       </Link>
       <div className='text-sm flex items-center gap-2'>
-        <span className='max-w52 text-ellipsis line-clamp-1 text-base'>
+        <span className='max-w52 text-ellipsis line-clamp-1 text-base hover:text-blue-500'>
           {user.name || user.mobile} 
           <span className='text-xs text-red-500'>{user.role === "ADMIN" ? "(Admin)" : "" }</span>
         </span>
         <Link
           onClick={handleClose}
           to={'/dashboard/profile'}
-          className='hover:text-primary-100'>
+          className='hover:text-primary-400'>
           <HiOutlineExternalLink size={20} />
         </Link>
       </div>

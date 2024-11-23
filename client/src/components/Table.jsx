@@ -17,9 +17,9 @@ const Table = ({data,column}) => {
         <thead className='bg-black text-white'>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              <th className='border'>Sl. No</th>
+              <th className='border'>Sr. No</th>
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className='border'>
+                <th key={header.id} className='border whitespace-nowrap'>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -36,7 +36,9 @@ const Table = ({data,column}) => {
             <tr key={row.id} className='hover:bg-gray-200 '>
               <td className='border px-2 py-0'>{index + 1}</td>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className='border px-2 py-0'>
+                <td
+                  key={cell.id}
+                  className='border px-2 py-0 whitespace-nowrap'>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
