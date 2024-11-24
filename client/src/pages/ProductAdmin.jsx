@@ -109,18 +109,34 @@ const ProductAdmin = () => {
             if (page === 1) return;
             setPage(page - 1);
           }}
-          className='border border-primary-400 px-4 py-1 hover:bg-primary-400'>
+          className='border border-primary-400 px-4 py-1 hover:bg-primary-400 ml-2'>
           Previos
         </button>
-        <button className='border w-full px-4 py-1 bg-slate-100'>
+        {/* <button className='border w-full px-4 py-1 bg-slate-100'>
           {page}/{totalPages}
-        </button>
+        </button> */}
+        <div className='flex items-center gap-2 bg-gray-100 p-2 rounded-lg shadow-md'>
+          <span className='text-gray-700 font-medium'>Page</span>
+          <input
+            type='number'
+            value={page}
+            onChange={(e) => {
+              const targetPage = Number(e.target.value);
+              if (targetPage >= 1 && targetPage <= totalPages) {
+                setPage(targetPage);
+              }
+            }}
+            className='w-10 border border-gray-300 rounded-md px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-blue-400'
+          />
+          <span className='text-gray-700 font-medium'>of {totalPages}</span>
+        </div>
+
         <button
           onClick={() => {
             if (page === totalPages) return;
             setPage(page + 1);
           }}
-          className='border border-secondary-200 px-4 py-1 hover:bg-green-400'>
+          className='border border-secondary-200 px-4 py-1 hover:bg-green-400 mr-2'>
           Next
         </button>
       </div>

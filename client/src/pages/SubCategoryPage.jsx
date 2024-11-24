@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UploadSubCategory from '../components/UploadSubCategory';
+import Loading from '../components/Loading';
 import AxiosToastError from '../utils/AxiosToastError.js';
 import Axios from '../utils/Axios.js';
 import SummaryApi from '../common/SummartApi.js';
@@ -81,8 +82,9 @@ const SubCategoryPage = () => {
           <div className='flex justify-center items-center'>
             <img
               src={info.getValue()}
-              className='w-20 pt-1 h-10 object-fill cursor-pointer'
+              className='w-20 pt-1 h-20 object-scale-down cursor-pointer'
               alt={info.getValue()}
+              title='Click to view image' // This will show the tooltip on hover
               onClick={() => setopenViewImage(info.getValue())}
             />
           </div>
@@ -157,7 +159,7 @@ const SubCategoryPage = () => {
       <div className='overflow-auto w-full max-w-[95vw]'>
         <Table data={data} column={column} />
       </div>
-
+      {loading && <Loading />}
       {addSubCategory && (
         <UploadSubCategory
           close={() => {
