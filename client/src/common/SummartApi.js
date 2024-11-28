@@ -1,4 +1,4 @@
-export const baseURL = 'https://mystore-backend-dpbj.onrender.com';
+export const baseURL = 'http://localhost:8080';
 
 const SummaryApi = {
   register: {

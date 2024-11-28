@@ -11,41 +11,13 @@ import categoryRouter from "./route/category.route.js";
 import uploadRouter from "./route/upload.route.js";
 import subCategoryRouter from "./route/subCategory.route.js";
 import productRouter from "./route/product.route.js";
-import path from "path";
 const app = express();
-const __dirname = path.resolve();
-const allowedOrigins = [
-  'http://localhost:5173', // Local development
-  'https://mystore-fontend.onrender.com/', // Deployed frontend
-];
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'https://mystore-frontend.onrender.com',
-  ];
-
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET, POST, PUT, DELETE, OPTIONS'
-    );
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization'
-    );
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-
-  // Allow OPTIONS requests for preflight
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
-
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('combined')); //use 'combined' for morgan deprecated error
@@ -55,7 +27,7 @@ app.use(helmet({
 // serve static files means to save img in public folder
 // app.use(express.static('public'));
 
-const PORT =8080 || process.env.PORT;
+const PORT =3000 || process.env.PORT;
 
 app.get("/", (req, res) => {
     res.send("Server is running fine");
@@ -66,13 +38,6 @@ app.use('/api/category', categoryRouter);
 app.use('/api/file', uploadRouter);
 app.use('/api/subcategory', subCategoryRouter);
 app.use('/api/product', productRouter);
-
-
-app.use(express.static(path.join(__dirname, '/client/dist')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/dist/index.html'));
-})
-
 
 // async methods returns promise 
 connectDB().then(()=>{
