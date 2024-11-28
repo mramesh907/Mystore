@@ -42,29 +42,31 @@ const UserMenu = ({ close }) => {
       <Link
         to={'/dashboard/profile'}
         onClick={handleClose}
-        className='font-semibold hover:text-primary-400'>
+        className='font-semibold hover:text-green-500'>
         My Account
       </Link>
-      <div className='text-sm flex items-center gap-2'>
+      <div className='text-lg flex items-center gap-2'>
         <span className='max-w52 text-ellipsis line-clamp-1 text-base hover:text-blue-500'>
-          {user.name || user.mobile} 
-          <span className='text-xs text-red-500'>{user.role === "ADMIN" ? "(Admin)" : "" }</span>
+          {user.name || user.mobile}
+          <span className='text-xs text-red-500'>
+            {user.role === 'ADMIN' ? '(Admin)' : ''}
+          </span>
         </span>
         <Link
           onClick={handleClose}
           to={'/dashboard/profile'}
-          className='hover:text-primary-400'>
+          className='hover:text-red-500'>
           <HiOutlineExternalLink size={20} />
         </Link>
       </div>
       <Divider />
       {/* <Divider /> */}
-      <div className='text-sm grid  '>
+      <div className='text-sm grid '>
         {Admin(user.role) && (
           <Link
             onClick={handleClose}
             to={'/dashboard/category'}
-            className='px-2 py-1 hover:bg-secondary-200 '>
+            className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
             Category
           </Link>
         )}
@@ -72,7 +74,7 @@ const UserMenu = ({ close }) => {
           <Link
             onClick={handleClose}
             to={'/dashboard/subcategory'}
-            className='px-2 py-1 hover:bg-secondary-200 '>
+            className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
             Sub Category
           </Link>
         )}
@@ -80,7 +82,7 @@ const UserMenu = ({ close }) => {
           <Link
             onClick={handleClose}
             to={'/dashboard/upload-product'}
-            className='px-2 py-1 hover:bg-secondary-200 '>
+            className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
             Upload Product
           </Link>
         )}
@@ -88,20 +90,20 @@ const UserMenu = ({ close }) => {
           <Link
             onClick={handleClose}
             to={'/dashboard/product'}
-            className='px-2 py-1 hover:bg-secondary-200 '>
+            className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
             Product
           </Link>
         )}
         <Link
           onClick={handleClose}
           to={'/dashboard/myorders'}
-          className='px-2 py-1 hover:bg-secondary-200 '>
+          className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
           My Orders
         </Link>
         <Link
           onClick={handleClose}
           to={'/dashboard/address'}
-          className='px-2 py-1 hover:bg-secondary-200'>
+          className='px-2 py-1 hover:bg-secondary-200 hover:text-white'>
           Save Address
         </Link>
         <button

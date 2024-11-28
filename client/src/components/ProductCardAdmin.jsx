@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProductCardAdmin = ({data}) => {
   return (
-    <div className='w-36 p-4 bg-white rounded shadow hover:shadow-xl transition-shadow'>
+    <div className='w-36 p-4 bg-white rounded shadow-md hover:shadow-xl transition-shadow'>
       <div className='w-full h-45 bg-gray-100 flex items-center justify-center overflow-hidden rounded'>
         <img
           src={data?.image[0]}

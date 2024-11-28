@@ -100,7 +100,7 @@ const CategoryPage = () => {
             //
             <div
               key={category._id}
-              className='w-32 h-52  shadow-md rounded group'>
+              className='w-32 h-52  shadow-md rounded hover:shadow-xl transition-shadow group'>
               {/* <h3 className='font-semibold'>{category.name}</h3> */}
               <img
                 src={category.image}
