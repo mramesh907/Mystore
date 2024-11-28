@@ -20,7 +20,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan('combined')); //use 'combined' for morgan deprecated error
+// app.use(morgan('combined')); //use 'combined' for morgan deprecated error
 app.use(helmet({
     crossOriginResourcePolicy: false
 }));
