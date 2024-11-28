@@ -11,8 +11,9 @@ import categoryRouter from "./route/category.route.js";
 import uploadRouter from "./route/upload.route.js";
 import subCategoryRouter from "./route/subCategory.route.js";
 import productRouter from "./route/product.route.js";
-
+import path from "path";
 const app = express();
+const __dirname = path.resolve();
 app.use(cors({
     credentials: true,
     origin: process.env.FRONTEND_URL
@@ -38,6 +39,11 @@ app.use('/api/file', uploadRouter);
 app.use('/api/subcategory', subCategoryRouter);
 app.use('/api/product', productRouter);
 
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/dist/index.html'));
+})
 
 
 // async methods returns promise 
