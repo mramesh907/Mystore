@@ -20,17 +20,24 @@ const allowedOrigins = [
 ];
 app.use(
   cors({
-    credentials: true,
-    // origin: process.env.FRONTEND_URL
+    credentials: true, // Allows cookies to be sent
     origin: (origin, callback) => {
+      // Define the list of allowed origins
+      const allowedOrigins = [
+        "http://localhost:5173", // Local development
+        "https://mystore-frontend.onrender.com", // Deployed frontend
+      ];
+
+      // Check if the request origin is in the allowed list or if the origin is undefined (e.g., in non-browser tools like Postman)
       if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true);
+        callback(null, true); // Allow the request
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error("Not allowed by CORS")); // Block the request
       }
     },
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('combined')); //use 'combined' for morgan deprecated error
