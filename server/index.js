@@ -14,10 +14,23 @@ import productRouter from "./route/product.route.js";
 import path from "path";
 const app = express();
 const __dirname = path.resolve();
-app.use(cors({
+const allowedOrigins = [
+  'http://localhost:5173', // Local development
+  'https://mystore-fontend.onrender.com/', // Deployed frontend
+];
+app.use(
+  cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL
-}))
+    // origin: process.env.FRONTEND_URL
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('combined')); //use 'combined' for morgan deprecated error
