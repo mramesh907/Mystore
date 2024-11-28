@@ -18,19 +18,34 @@ const allowedOrigins = [
   'http://localhost:5173', // Local development
   'https://mystore-fontend.onrender.com/', // Deployed frontend
 ];
-app.use(
-  cors({
-    credentials: true,
-    // origin: process.env.FRONTEND_URL
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-  })
-);
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'https://mystore-frontend.onrender.com',
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, DELETE, OPTIONS'
+    );
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization'
+    );
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  // Allow OPTIONS requests for preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('combined')); //use 'combined' for morgan deprecated error
