@@ -21,6 +21,13 @@ export const createProductController = async (req, res) => {
         success: false,
       });
     }
+    if((stock < 0) || (price < 0) || (discount < 0)){
+      return res.status(400).json({
+        message: 'Stock, price and discount cannot be negative',
+        error: true,
+        success: false,
+      });
+    }
 
     const addProduct = new ProductModel({
       name,
