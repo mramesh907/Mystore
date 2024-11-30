@@ -184,7 +184,7 @@ export async function loginController(req, res) {
 // logout controller
 export async function logoutController(req, res) {
   try {
-    const userid = req.userId; //comeing from middlewear
+    const userid = req.userId; //comeing from auth middlewear
 
     const cookiesOptions = {
       httpOnly: true,
@@ -194,7 +194,7 @@ export async function logoutController(req, res) {
     res.clearCookie('accessToken', cookiesOptions);
     res.clearCookie('refreshToken', cookiesOptions);
 
-    const removeRefreshToken = await UserModel.findByIdAndUpdate(
+    await UserModel.findByIdAndUpdate(
       { _id: userid },
       { refreshToken: '' }
     );

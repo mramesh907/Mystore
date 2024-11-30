@@ -125,7 +125,7 @@ const UploadCategoryComponent = ({ close, fetchData }) => {
           {/* add category */}
           <button
             className={`
-            ${data.name && data.image ? 'bg-primary-400 cursor-pointer hover:bg-primary-300' : 'bg-gray-400'}
+            ${data.name && data.image ? 'bg-primary-400 cursor-pointer hover:bg-primary-300' : 'bg-gray-400 cursor-auto'}
             py-2 px-4 rounded text-white
             font-semibold
             `}>
