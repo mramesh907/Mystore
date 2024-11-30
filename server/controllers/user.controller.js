@@ -33,14 +33,19 @@ export async function registerUserController(req, res) {
     const salt = await bcryptjs.genSalt(10);
     const hashPassword = await bcryptjs.hash(password, salt);
 
-    const payload = {
+    // const payload = {
+    //   name,
+    //   email,
+    //   password: hashPassword,
+    // };
+
+    // const newUser = new UserModel(payload);
+    // const save = await newUser.save();
+    const save = await UserModel.create({
       name,
       email,
       password: hashPassword,
-    };
-
-    const newUser = new UserModel(payload);
-    const save = await newUser.save();
+    });
 
     const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
 
@@ -117,6 +122,7 @@ export async function loginController(req, res) {
     }
 
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       return res.status(400).json({
         message: 'User not registered',
@@ -146,8 +152,8 @@ export async function loginController(req, res) {
     const accessToken = await generatedAccessToken(user._id);
     const refreshToken = await generatedRefreshToken(user._id);
     const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
-      lastLoginDate : new Date()
-    }); 
+      lastLoginDate: new Date(),
+    });
     const cookiesOptions = {
       httpOnly: true,
       secure: true,
@@ -264,7 +270,7 @@ export async function updateUserDetails(req, res) {
       message: 'User details updated successfully',
       error: false,
       success: true,
-      data: updateUser
+      data: updateUser,
     });
   } catch (error) {
     return res.status(500).json({
@@ -291,7 +297,7 @@ export async function forgotPasswordController(req, res) {
     }
     const otp = generatedOtp();
     const expireTime = new Date(new Date().getTime() + 2 * 60 * 1000);
- //2 minute
+    //2 minute
 
     const update = await UserModel.findByIdAndUpdate(user._id, {
       forgotPasswordOtp: otp,
@@ -485,7 +491,7 @@ export async function refreshToken(req, res) {
 }
 
 // get login user details
-export async function userDetails(req,res){
+export async function userDetails(req, res) {
   try {
     const userId = req.userId;
 
@@ -497,13 +503,13 @@ export async function userDetails(req,res){
       message: 'User details fetched successfully',
       error: false,
       success: true,
-      data: user
-    })
+      data: user,
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
       error: true,
-      success: false
-    })
+      success: false,
+    });
   }
 }
