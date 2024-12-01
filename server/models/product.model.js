@@ -56,7 +56,7 @@ const productSchema = new mongoose.Schema(
 productSchema.index(
   { name: 'text', description: 'text' }, // Fields to be indexed
   {
-    weights: { name: 10, description: 5 }, // Weights for prioritizing fields
+    weights: { name: 10, description: 5,  }, // Weights for prioritizing fields
   }
 );
 
