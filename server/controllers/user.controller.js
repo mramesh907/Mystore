@@ -45,15 +45,23 @@ export async function registerUserController(req, res) {
       email,
       password: hashPassword,
     });
+    if (!save) {
+      return res.status(500).json({
+        message: 'Something went wrong, User not registered',
+        error: true,
+        success: false,
+      });
+    }
 
-    const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
+    // const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
 
+    const userId = save?._id;
     const verifyEmail = await sendEmail({
       sendTo: email,
       subject: 'Verify email from Mystore',
       html: verifyEmailTemplate({
         name,
-        url: VerifyEmailUrl,
+        userId,
       }),
     });
 
@@ -75,8 +83,8 @@ export async function registerUserController(req, res) {
 // verify email controller
 export async function verifyEmailController(req, res) {
   try {
-    const { code } = req.body;
-
+    const { code } = req.query;
+    
     const user = await UserModel.findOne({ _id: code });
 
     if (!user) {
@@ -98,7 +106,7 @@ export async function verifyEmailController(req, res) {
       success: true,
       data: updateUser,
     });
-  } catch (error) {
+  } catch (error) {    
     return res.status(500).json({
       message: error.message || error,
       error: true,

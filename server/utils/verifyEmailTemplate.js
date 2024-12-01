@@ -1,4 +1,5 @@
-const verifyEmailTemplate = ({ name, url }) => {
+const verifyEmailTemplate = ({ name, userId }) => {
+  let url = `${process.env.FRONTEND_URL}/verify-email?code=${userId}`;
   return `
     <h1>Hi ${name}</h1>
     <p>Click the link below to verify your email</p>
