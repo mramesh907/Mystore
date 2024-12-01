@@ -63,6 +63,7 @@ export const createProductController = async (req, res) => {
   }
 };
 
+// get product
 export const getProductController = async (req, res) => {
   try {
     let { page, limit, search } = req.body;
@@ -73,7 +74,6 @@ export const getProductController = async (req, res) => {
     if(!limit){
       limit= 10
     }
-    console.log('search in server',search);
     
     
     const query = search
