@@ -17,7 +17,7 @@ import SubCategoryPage from '../pages/SubCategoryPage';
 import UploadProduct from '../pages/UploadProduct';
 import ProductAdmin from '../pages/ProductAdmin';
 import AdminPermission from '../layouts/AdminPermission'
-
+import VerifyEmail from '../pages/VerifyEmail';
 const router = createBrowserRouter(
   [
     {
@@ -51,6 +51,10 @@ const router = createBrowserRouter(
         {
           path: 'reset-password',
           element: <ResetPassword />,
+        },
+        {
+          path: 'verify-email',
+          element: <VerifyEmail />, // Add this route
         },
         {
           path: 'user',
