@@ -15,7 +15,9 @@ const Profile = () => {
     const [userData, setuserData] = useState({
       name:user.name,
       email:user.email,
-      mobile:user.mobile
+      mobile:user.mobile,
+      verifyEmail:user.verifyEmail,
+      password:user.password
     })
     const [loading, setloading] = useState(false)
     const dispatch = useDispatch()
@@ -24,6 +26,8 @@ const Profile = () => {
           name: user.name,
           email: user.email,
           mobile: user.mobile,
+          verifyEmail: user.verifyEmail,
+          password: user.password
         });
     },[user])
     const handleOnChange =(e)=>{
@@ -35,6 +39,8 @@ const Profile = () => {
           }
         })
     }
+
+
     const handleSubmit = async(e)=>{
         e.preventDefault()
         try {
@@ -87,10 +93,11 @@ const Profile = () => {
         className='border border-gray-200 rounded p-4 mt-4 my-4 ml-2 grid gap-4'
         onSubmit={handleSubmit}>
         <div className='grid'>
-          <label>Name</label>
+          <label htmlFor='name'>Name</label>
           <input
             type='text'
             name='name'
+            id='name'
             value={userData.name}
             placeholder='Enter your name'
             className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded'
@@ -111,6 +118,11 @@ const Profile = () => {
               className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded w-full'
               onChange={handleOnChange}
             />
+            {userData.verifyEmail ? (
+              <span className='text-green-600 font-semibold'>Verified</span>
+            ) : (
+              <span className='text-red-600 font-semibold'>Not Verified</span>
+            )}
           </div>
         </div>
 
@@ -121,15 +133,26 @@ const Profile = () => {
             name='mobile'
             id='mobile'
             value={userData.mobile}
-            required
             placeholder='Enter your mobile'
+            className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded'
+            onChange={handleOnChange}
+          />
+        </div>
+        {/* Change Password */}
+        <div className='grid'>
+          <label htmlFor='password'>Change Password</label>
+          <input
+            type='password'
+            name='password'
+            id='password'
+            placeholder='Enter new password'
             className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded'
             onChange={handleOnChange}
           />
         </div>
 
         <button className='border px-4 py-2 font-semibold bg-primary-100 hover:bg-primary-200 border-black rounded'>
-          {loading ? 'Loading...' : 'Submit'}
+          {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
     </div>
