@@ -57,33 +57,35 @@ const Profile = () => {
     }
   return (
     <div>
-        <div className='flex flex-col justify-center items-center'>
-      {/* profile upload and display image */}
-      <div className='flex justify-center items-center w-20 h-20 bg-red-400 rounded-full overflow-hidden drop-shadow-sm'>
-        {user.avatar ? (
-          <img src={user.avatar} alt={user.name} className='w-full h-full' />
-        ) : (
-          <FaRegUserCircle size={50} />
+      <div className='flex flex-col justify-center items-center'>
+        {/* profile upload and display image */}
+        <div className='flex justify-center items-center w-20 h-20 bg-red-400 rounded-full overflow-hidden drop-shadow-sm'>
+          {user.avatar ? (
+            <img src={user.avatar} alt={user.name} className='w-full h-full' />
+          ) : (
+            <FaRegUserCircle size={50} />
+          )}
+        </div>
+        <button
+          onClick={() => {
+            setopenProfileAvatarEdit(true);
+          }}
+          className='btn text-sm min-w-20 border border-primary-100 hover:border-primary-200 hover:bg-primary-100 px-3 py-1 rounded-full mt-3'>
+          Edit
+        </button>
+
+        {openProfileAvatarEdit && (
+          <UserProfileAvatarEdit
+            close={() => {
+              setopenProfileAvatarEdit(false);
+            }}
+          />
         )}
       </div>
-      <button
-        onClick={() => {
-          setopenProfileAvatarEdit(true);
-        }}
-        className='btn text-sm min-w-20 border border-primary-100 hover:border-primary-200 hover:bg-primary-100 px-3 py-1 rounded-full mt-3'>
-        Edit
-      </button>
-
-      {openProfileAvatarEdit && (
-        <UserProfileAvatarEdit
-          close={() => {
-            setopenProfileAvatarEdit(false);
-          }}
-        />
-      )}
-    </div>
       {/* name , mobile , email , change password */}
-      <form className='border border-gray-200 rounded p-4 mt-4 my-4 ml-2 grid gap-4' onSubmit={handleSubmit} >
+      <form
+        className='border border-gray-200 rounded p-4 mt-4 my-4 ml-2 grid gap-4'
+        onSubmit={handleSubmit}>
         <div className='grid'>
           <label>Name</label>
           <input
@@ -98,17 +100,20 @@ const Profile = () => {
         </div>
         <div className='grid'>
           <label htmlFor='email'>Email</label>
-          <input
-            type='text'
-            name='email'
-            id='email'
-            value={userData.email}
-            required
-            placeholder='Enter your email'
-            className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded'
-            onChange={handleOnChange}
-          />
+          <div className='flex items-center gap-2'>
+            <input
+              type='email'
+              name='email'
+              id='email'
+              value={userData.email}
+              required
+              placeholder='Enter your email'
+              className='p-2 bg-blue-50 outline-none border focus-within:border-primary-200 rounded w-full'
+              onChange={handleOnChange}
+            />
+          </div>
         </div>
+
         <div className='grid'>
           <label htmlFor='mobile'>Mobile</label>
           <input
@@ -124,9 +129,7 @@ const Profile = () => {
         </div>
 
         <button className='border px-4 py-2 font-semibold bg-primary-100 hover:bg-primary-200 border-black rounded'>
-          {
-            loading ? "Loading..." : "Submit"
-          }
+          {loading ? 'Loading...' : 'Submit'}
         </button>
       </form>
     </div>

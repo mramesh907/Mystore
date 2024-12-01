@@ -39,9 +39,21 @@ const ProductAdmin = () => {
       setLoading(false);
     }
   };
+  // useEffect(() => {
+  //   fetchProductData();
+  // }, [page]);
+
+  // This useEffect will trigger whenever the page or Search changes
+
   useEffect(() => {
-    fetchProductData();
-  }, [page]);
+    const debounceFetch = setTimeout(() => {
+      fetchProductData();
+    }, 400); // Debounce the search to prevent excessive calls
+
+    return () => {
+      clearTimeout(debounceFetch); // Cleanup the timeout when page/Search change
+    };
+  }, [page, Search]); // This will run whenever either `page` or `Search` changes
 
   const handleOnChange = (e) => {
     const { value } = e.target;
@@ -49,19 +61,19 @@ const ProductAdmin = () => {
     setPage(1);
   };
 
-  useEffect(() => {
-    let flag = true;
-    const interval = setTimeout(() => {
-      if (flag) {
-        fetchProductData();
-        flag = false;
-      }
-    }, 400);
+  // useEffect(() => {
+  //   let flag = true;
+  //   const interval = setTimeout(() => {
+  //     if (flag) {
+  //       fetchProductData();
+  //       flag = false;
+  //     }
+  //   }, 400);
 
-    return () => {
-      clearTimeout(interval);
-    };
-  }, [Search]);
+  //   return () => {
+  //     clearTimeout(interval);
+  //   };
+  // }, [Search]);
 
   return (
     <section>
