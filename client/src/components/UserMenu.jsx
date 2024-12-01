@@ -27,7 +27,7 @@ const UserMenu = ({ close }) => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.clear();
-                toast.success(response.data.message);
+        toast.success(response.data.message);
         navigate('/');
       }
     } catch (error) {

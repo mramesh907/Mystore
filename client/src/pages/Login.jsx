@@ -65,7 +65,6 @@ const Login = () => {
         toast.success(response.data.message);
         localStorage.setItem('accessToken', response.data.data.accessToken);
         localStorage.setItem('refreshToken', response.data.data.refreshToken);
-        window.localStorage.setItem('login', Date.now());
         const userDetails = await fetchUserDetails();
 
         dispatch(setUserDetails(userDetails.data));
@@ -86,7 +85,10 @@ const Login = () => {
       <div className='bg-white my-4 w-full max-w-lg mx-auto rounded p-7'>
         <p className='text-2xl font-semibold text-center'>Login</p>
 
-        <form className='grid gap-4 py-4 mt-6' onSubmit={handleSubmit}>
+        <form
+          className='grid gap-4 py-4 mt-6'
+          onSubmit={handleSubmit}
+          autoComplete='off'>
           {/* email */}
           <div className='grid gap-1 '>
             <label htmlFor='email'>Email :</label>
@@ -98,6 +100,7 @@ const Login = () => {
               value={data.email}
               onChange={handleChange}
               placeholder='Enter your email'
+              autoComplete='new-email'
             />
           </div>
           {/* password */}
@@ -112,6 +115,7 @@ const Login = () => {
                 value={data.password}
                 onChange={handleChange}
                 placeholder='Enter your password'
+                autoComplete='new-password'
               />
               <div
                 onClick={() => setshowPassword((preve) => !preve)}
