@@ -5,6 +5,13 @@ const SummaryApi = {
     url: '/api/user/register',
     method: 'post',
   },
+  verifyEmail: {
+    url: '/api/user/verify-email',
+    method: 'post',
+    params: {
+      code: '', // This will be populated dynamically when calling the endpoint
+    },
+  },
   login: {
     url: '/api/user/login',
     method: 'post',
