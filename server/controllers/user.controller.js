@@ -8,7 +8,6 @@ import uploadImageCloudinary from '../utils/uploadImageCloudinary.js';
 import generatedOtp from '../utils/generatedOtp.js';
 import forgotPasswordEmailTemplate from '../utils/forgotPasswordEmailTemplate.js';
 import jwt from 'jsonwebtoken';
-// import ApiError from '../utils/ApiError.js';
 
 // register controller
 export async function registerUserController(req, res) {
@@ -194,10 +193,7 @@ export async function logoutController(req, res) {
     res.clearCookie('accessToken', cookiesOptions);
     res.clearCookie('refreshToken', cookiesOptions);
 
-    await UserModel.findByIdAndUpdate(
-      { _id: userid },
-      { refreshToken: '' }
-    );
+    await UserModel.findByIdAndUpdate({ _id: userid }, { refreshToken: '' });
 
     return res.status(200).json({
       message: 'User logged out successfully',
@@ -438,7 +434,7 @@ export async function resetPassword(req, res) {
   }
 }
 
-// Refresh Token Api
+// Refresh Token Api(to extend the life span of access token)
 export async function refreshToken(req, res) {
   try {
     const refreshToken =
@@ -465,13 +461,20 @@ export async function refreshToken(req, res) {
     }
 
     const userId = verifyToken?._id;
-
+ if (!userId) {
+   return res.status(401).json({
+     message: 'Invalid token payload',
+     error: true,
+     success: false,
+   });
+ }
     const newAccessToken = await generatedAccessToken(userId);
-    res.cookie('accessToken', newAccessToken, {
+    const options = {
       httpOnly: true,
       sameSite: 'None',
       secure: true,
-    });
+    };
+    res.cookie('accessToken', newAccessToken, options);
 
     return res.status(200).json({
       message: 'Token refreshed successfully',
