@@ -98,7 +98,7 @@ const Register = () => {
               value={data.email}
               onChange={handleChange}
               placeholder='Enter your email'
-              autoComplete='off'
+              autoComplete='email'
             />
           </div>
           {/* password */}
