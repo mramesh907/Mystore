@@ -68,7 +68,10 @@ const Register = () => {
       <div className='bg-white my-4 w-full max-w-lg mx-auto rounded p-7'>
         <p className='text-2xl font-semibold text-center'>Register</p>
 
-        <form className='grid gap-4 mt-6' onSubmit={handleSubmit}>
+        <form
+          className='grid gap-4 mt-6'
+          onSubmit={handleSubmit}
+          autoComplete='off'>
           {/* name */}
           <div className='grid gap-1 '>
             <label htmlFor='name'>Name :</label>
@@ -81,6 +84,7 @@ const Register = () => {
               value={data.name}
               onChange={handleChange}
               placeholder='Enter your name'
+              autoComplete='off'
             />
           </div>
           {/* email */}
@@ -94,6 +98,7 @@ const Register = () => {
               value={data.email}
               onChange={handleChange}
               placeholder='Enter your email'
+              autoComplete='off'
             />
           </div>
           {/* password */}
@@ -108,6 +113,7 @@ const Register = () => {
                 value={data.password}
                 onChange={handleChange}
                 placeholder='Enter your password'
+                autoComplete='new-password'
               />
               <div
                 onClick={() => setshowPassword((preve) => !preve)}
@@ -128,6 +134,7 @@ const Register = () => {
                 value={data.confirmPassword}
                 onChange={handleChange}
                 placeholder='Enter your confirm password'
+                autoComplete='new-password'
               />
               <div
                 onClick={() => setshowConfirmPassword((preve) => !preve)}
