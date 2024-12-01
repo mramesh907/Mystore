@@ -41,7 +41,7 @@ export const addSubCategoryController = async (req, res) => {
     }
 }
 
-export const getSubCategoryController = async (req, res) => {
+export const getSubCategoryController = async (_, res) => {
     try {
       const data = await SubCategoryModel.find()
         .sort({ createdAt: -1 })
