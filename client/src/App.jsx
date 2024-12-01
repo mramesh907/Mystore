@@ -14,10 +14,23 @@ import SummaryApi from './common/SummartApi';
 function App() {
   const dispatch = useDispatch();
 
+  // const fetchUser = async () => {
+  //   const userData = await fetchUserDetails();
+  //   dispatch(setUserDetails(userData?.data));
+  // };
   const fetchUser = async () => {
-    const userData = await fetchUserDetails();
-    dispatch(setUserDetails(userData?.data));
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      try {
+        const userData = await fetchUserDetails();
+        dispatch(setUserDetails(userData?.data));
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        toast.error('Failed to fetch user details.');
+      }
+    }
   };
+
   const fetchCategory = async () => {
     try {
       const response = await Axios({
@@ -28,8 +41,6 @@ function App() {
         dispatch(setAllCategory(responseData.data));
       }
     } catch (error) {
-    } finally {
-      //  setloading(false);
     }
   };
 
@@ -43,8 +54,6 @@ function App() {
         dispatch(setAllSubCategory(responseData.data));
       }
     } catch (error) {
-    } finally {
-      //  setloading(false);
     }
   };
   
