@@ -1,5 +1,5 @@
 /* eslint-disable no-empty */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoMdEyeOff } from 'react-icons/io';
 import { FaRegEye } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
@@ -21,7 +21,22 @@ const Login = () => {
   const [showPassword, setshowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setdata({
+      email: '',
+      password: '',
+    });
+  }, []);
+
+  // Check if user is already logged in when the component mounts
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      // If the token exists, redirect to the home page
+      navigate('/');
+    }
+  }, [navigate]);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -50,7 +65,8 @@ const Login = () => {
         toast.success(response.data.message);
         localStorage.setItem('accessToken', response.data.data.accessToken);
         localStorage.setItem('refreshToken', response.data.data.refreshToken);
-        const userDetails = await fetchUserDetails()
+        window.localStorage.setItem('login', Date.now());
+        const userDetails = await fetchUserDetails();
 
         dispatch(setUserDetails(userDetails.data));
 
