@@ -22,7 +22,7 @@ const SummaryApi = {
     method: 'put',
   },
   refreshToken: {
-    url: 'api/user/reset-password',
+    url: 'api/user/refresh-token',
     method: 'post',
   },
   userDetails: {
