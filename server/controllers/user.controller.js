@@ -459,15 +459,14 @@ export async function refreshToken(req, res) {
         success: false,
       });
     }
-
-    const userId = verifyToken?._id;
- if (!userId) {
-   return res.status(401).json({
-     message: 'Invalid token payload',
-     error: true,
-     success: false,
-   });
- }
+    const userId = verifyToken?.id;
+    if (!userId) {
+      return res.status(401).json({
+        message: 'Invalid token payload',
+        error: true,
+        success: false,
+      });
+    }
     const newAccessToken = await generatedAccessToken(userId);
     const options = {
       httpOnly: true,
