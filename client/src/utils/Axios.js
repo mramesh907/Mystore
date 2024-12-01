@@ -22,7 +22,7 @@ Axios.interceptors.request.use(
 
 // extend the life span of access token with the help of refresh token
 
-Axios.interceptors.request.use(
+Axios.interceptors.response.use(
   (response) => {
     return response;
   },
