@@ -20,12 +20,14 @@ const UserMenu = ({ close }) => {
         ...SummaryApi.logout,
       });
       if (response.data.success) {
-        if (close) {
+        if (close && typeof close === 'function') {
           close();
         }
         dispatch(logout());
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         localStorage.clear();
-        toast.success(response.data.message);
+                toast.success(response.data.message);
         navigate('/');
       }
     } catch (error) {
