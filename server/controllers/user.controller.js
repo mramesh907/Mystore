@@ -355,6 +355,11 @@ export async function verifyForgotPasswordOtp(req, res) {
     const expiryTime = user.forgotPasswordExpiry;
 
     if (currentTime > expiryTime) {
+      // if otp is expired
+      const update = await UserModel.findByIdAndUpdate(user?._id, {
+        forgotPasswordOtp: '',
+        forgotPasswordExpiry: '',
+      });
       return res.status(400).json({
         message: 'Otp expired',
         error: true,
