@@ -20,7 +20,7 @@ const UserMenu = ({ close }) => {
         ...SummaryApi.logout,
       });
       if (response.data.success) {
-        if (close && typeof close === 'function') {
+        if (close || typeof close === 'function') {
           close();
         }
         dispatch(logout());
