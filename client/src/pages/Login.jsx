@@ -28,15 +28,6 @@ const Login = () => {
       password: '',
     });
   }, []);
-
-  // Check if user is already logged in when the component mounts
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      // If the token exists, redirect to the home page
-      navigate('/');
-    }
-  }, [navigate]);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
