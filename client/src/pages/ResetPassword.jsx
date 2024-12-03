@@ -8,7 +8,6 @@ import AxiosToastError from '../utils/AxiosToastError';
 import Axios from '../utils/Axios';
 const ResetPassword = () => {
   const location = useLocation();
-  console.log('location : ', location);
   const navigate = useNavigate();
   const [data, setdata] = useState({
     email: '',
@@ -89,7 +88,7 @@ const ResetPassword = () => {
               <input
                 type={showPassword ? 'text' : 'password'}
                 id='password'
-                className='w-full outline-none'
+                className='w-full outline-none bg-blue-50'
                 name='newPassword'
                 value={data.newPassword}
                 onChange={handleChange}
@@ -110,7 +109,7 @@ const ResetPassword = () => {
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id='confirmPassword'
-                className='w-full outline-none'
+                className='w-full outline-none bg-blue-50'
                 name='confirmPassword'
                 value={data.confirmPassword}
                 onChange={handleChange}
