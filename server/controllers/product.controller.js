@@ -172,3 +172,28 @@ export const getProductByCategoryAndSubCategoryController = async (req, res) => 
       .json({ message: error.message || error, success: false, error: true });
   }
 }
+
+
+export const getProductDetailsController = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    if (!productId) {
+      return res.status(400).json({
+        message: 'Product id is required',
+        error: true,
+        success: false,
+      });
+    }
+    const data = await ProductModel.findById(productId);
+    return res.status(200).json({
+      message: 'Product details fetched successfully',
+      success: true,
+      error: false,
+      data: data,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || error, success: false, error: true });
+  }
+}
