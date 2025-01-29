@@ -110,7 +110,7 @@ const ProductAdmin = () => {
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {productData && productData.length > 0 ? (
             productData.map((item, index) => (
-              <ProductCardAdmin key={index} data={item} />
+              <ProductCardAdmin key={index} data={item} fetchProductData={fetchProductData} />
             ))
           ) : (
             <p className='col-span-full text-center'>No products available</p>

@@ -1,88 +1,183 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import SummaryApi from '../common/SummartApi.js'
-import Axios from '../utils/Axios.js'
-import AxiosToastError from '../utils/AxiosToastError.js'
-import {FaAngleLeft,FaAngleRight} from 'react-icons/fa6'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import SummaryApi from '../common/SummartApi.js';
+import Axios from '../utils/Axios.js';
+import AxiosToastError from '../utils/AxiosToastError.js';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import minute_delivery from '../assets/minute_delivery.png';
+import Best_Prices_Offers from '../assets/Best_Prices_Offers.png';
+import Wide_Assortment from '../assets/Wide_Assortment.png';
 const ProductDisplayPage = () => {
-  const params=useParams();
-  const [data,setData]=useState({
-    name:'',
-    image:[]
-  })
-  const [loading,setLoading]=useState(false);
-  const [image,setImage]=useState(0);
+  const params = useParams();
+  const [data, setData] = useState({
+    name: '',
+    image: [],
+  });
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(0);
+  const DisplayPriceInRupees = (price) => {
+    const formattedPrice = new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+    }).format(price);
 
+    const rupeeSymbol = formattedPrice.slice(0, 1); // Extract the `₹` symbol
+    const remainingText = formattedPrice.slice(1); // Extract the rest of the price
 
-  let productId=params?.product?.split('-')?.splice(-1)[0];
-  
-  const fetchProductData=async()=>{
+    return (
+      <span>
+        <span style={{ fontFamily: 'Arial, sans-serif' }}>{rupeeSymbol}</span>
+        <span style={{ fontFamily: 'Poppins, sans-serif' }}>
+          {remainingText}
+        </span>
+      </span>
+    );
+  };
+
+  let productId = params?.product?.split('-')?.splice(-1)[0];
+
+  const fetchProductData = async () => {
     try {
-      const response=await Axios({
+      const response = await Axios({
         ...SummaryApi.getProductDetails,
-        data:{productId:productId}
-      })
-      console.log('response',response);
-      if(response.data.success){
+        data: { productId: productId },
+      });
+      if (response.data.success) {
         setData(response.data.data);
+        console.log('response.data.data',data);
+        
       }
-      
     } catch (error) {
-     AxiosToastError(error);
-    }finally{
+      AxiosToastError(error);
+    } finally {
       setLoading(false);
     }
-  }
+  };
+
   useEffect(() => {
     fetchProductData();
-  }, [params])
-  console.log('data', data);
+  }, [params]);
 
   return (
-    <section className='container mx-auto p-4 grid lg:grid-cols-2 '>
-      <div className=''>
-        <div className='rounded-md min-h-56 max-h-56 h-full w-full  lg:min-h-[72vh] lg:max-h-[72vh]'>
+    <section className='container mx-auto p-4 grid lg:grid-cols-2 gap-4'>
+      {/* Image Section */}
+      <div className='flex flex-col justify-center items-center'>
+        <div className='w-full max-w-md h-[72vh] relative'>
           <img
             src={data?.image[image]}
-            alt=''
-            className='w-full h-full object-scale-down rounded-md'
+            alt='Product'
+            className='w-full h-full object-contain rounded-md shadow-lg'
           />
         </div>
-        <div className='grid relative'>
-          <div>
-            {data?.image?.length > 1 && (
-              <div className='flex items-center justify-center gap-2 w-full overflow-x-auto scrollbar-none mt-2'>
+
+        {/* Thumbnail Images with Navigation Buttons */}
+        <div className='mt-4 w-full flex items-center justify-center relative'>
+          {data?.image?.length > 1 && (
+            <div className='relative w-full flex items-center'>
+              {/* Left Button */}
+              <button
+                className='absolute left-0 bg-white p-2 rounded-full shadow-md z-10'
+                onClick={() =>
+                  setImage(image > 0 ? image - 1 : data?.image.length - 1)
+                }>
+                <FaAngleLeft size={20} />
+              </button>
+
+              {/* Thumbnails */}
+              <div className='flex gap-2 mx-auto overflow-x-auto no-scrollbar w-[80%]'>
                 {data?.image?.map((item, index) => (
                   <img
                     src={item}
-                    alt=''
+                    alt={`Product Image ${index + 1}`}
                     key={index}
-                    className={`cursor-pointer w-20 h-20 min-h-20 min-w-20 object-scale-down rounded-md shadow-md border-2 border-[${index === image ? 'blue' : 'transparent'}] ${index === image ? 'border-blue-500' : ''}`}
+                    className={`cursor-pointer w-16 h-16 object-contain rounded-md shadow-md border-2 ${
+                      index === image ? 'border-blue-500' : 'border-transparent'
+                    }`}
                     onClick={() => setImage(index)}
                   />
                 ))}
               </div>
-            )}
-          </div>
-          <div className='absolute top-1/2 left-2 right-2 flex justify-between'>
-            <button>
-              <FaAngleLeft size={20} />
-            </button>
-            <button>
-              <FaAngleRight size={20} />
-            </button>
-          </div>
+
+              {/* Right Button */}
+              <button
+                className='absolute right-0 bg-white p-2 rounded-full shadow-md z-10'
+                onClick={() =>
+                  setImage(image < data?.image.length - 1 ? image + 1 : 0)
+                }>
+                <FaAngleRight size={20} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <div>
-        {/* <h1>{data?.name}</h1>
-        <p>{data?.unit}</p>
-        <p>{data?.price}</p>
-        <p>{data?.quantity}</p> */}
+      {/* Product Details Section */}
+      <div className='space-y-4'>
+        <h1 className='text-2xl font-bold'>{data?.name}</h1>
+        {/* Add other product details here */}
+        <p>{data?.description}</p>
+        <p className='text-lg bg-green-300 px-2 py-1 w-fit rounded-md'>
+          {data?.unit}
+        </p>
+        <p className='text-lg'>Price</p>
+        <p className='text-xl font-semibold text-gray-700 border border-green-300 px-2 py-1 w-fit rounded-md'>
+          {DisplayPriceInRupees(data?.price)}
+        </p>
+        {data?.stock > 0 ? (
+          <>
+            <p className='text-lg'>In Stock</p>
+            <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
+              Add
+            </button>
+          </>
+        ) : (
+          <p className='text-lg text-red-600'>Out of Stock</p>
+        )}
+
+        <h2 className='font-semibold mt-4'>Why shop from us?</h2>
+        <div>
+          <div className='flex items-center gap-2 my-4'>
+            <img
+              src={minute_delivery}
+              className='w-20 h-20'
+              alt='minute_delivery'
+            />
+            <div className='space-y-1'>
+              <div className='font-semibold'>Fast Delivery</div>
+              <p className='text-gray-600'>Delivered in 2-3 business days</p>
+            </div>
+          </div>
+          <div className='flex items-center gap-2 my-4'>
+            <img
+              src={Best_Prices_Offers}
+              className='w-20 h-20'
+              alt='Best_Prices_Offers'
+            />
+            <div className='space-y-1'>
+              <div className='font-semibold'>Best Prices & Offers</div>
+              <p className='text-gray-600'>Best prices and exclusive offers</p>
+            </div>
+          </div>
+          <div className='flex items-center gap-2 my-4'>
+            <img
+              src={Wide_Assortment}
+              className='w-20 h-20'
+              alt='Wide_Assortment'
+            />
+            <div className='space-y-1'>
+              <div className='font-semibold'>Wide Assortment</div>
+              <p className='text-gray-600'>Wide selection of products</p>
+            </div>
+          </div>
+          <p className='text-gray-600'>
+            We are committed to providing you with the best quality products,
+            ensuring that you receive a satisfying experience and value for your
+            money.
+          </p>
+        </div>
       </div>
     </section>
   );
-}
+};
 
-export default ProductDisplayPage
+export default ProductDisplayPage;

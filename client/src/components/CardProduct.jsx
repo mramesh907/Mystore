@@ -2,11 +2,22 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { validUrlConver } from '../utils/validUrlConver';
 const DisplayPriceInRupees = (price) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-    }).format(price);
-}
+  const formattedPrice = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }).format(price);
+
+  const rupeeSymbol = formattedPrice.slice(0, 1); // Extract the `₹` symbol
+  const remainingText = formattedPrice.slice(1); // Extract the rest of the price
+
+  return (
+    <span>
+      <span style={{ fontFamily: 'Arial, sans-serif' }}>{rupeeSymbol}</span>
+      <span style={{ fontFamily: 'Poppins, sans-serif' }}>{remainingText}</span>
+    </span>
+  );
+};
+
 const CardProduct = ({data}) => {  
   const url = `/product/${validUrlConver(data?.name)}-${data?._id}`;
   return (

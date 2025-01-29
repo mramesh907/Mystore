@@ -93,7 +93,8 @@ export const getProductController = async (req, res) => {
       ProductModel.find(query)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
-        .limit(limit),
+        .limit(limit)
+        .populate('category subCategory'),
       ProductModel.countDocuments(query),
     ]);
     return res.status(200).json({
@@ -190,6 +191,30 @@ export const getProductDetailsController = async (req, res) => {
       success: true,
       error: false,
       data: data,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || error, success: false, error: true });
+  }
+}
+
+export const updateProductController = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    if (!productId) {
+      return res.status(400).json({
+        message: 'Product id is required',
+        error: true,
+        success: false,
+      });
+    }
+    const update = await ProductModel.findByIdAndUpdate(productId, req.body);
+    return res.status(200).json({
+      message: 'Product updated successfully',
+      success: true,
+      error: false,
+      data: update,
     });
   } catch (error) {
     return res
