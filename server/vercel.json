@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "Full Stack",
+  "name": "student-management-system",
   "builds": [
     {
       "src": "index.js",
@@ -9,8 +9,12 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "index.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "index.js"
     }
   ]
 }
