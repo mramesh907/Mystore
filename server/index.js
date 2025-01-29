@@ -27,7 +27,7 @@ app.use(helmet({
 // serve static files means to save img in public folder
 // app.use(express.static('public'));
 
-const PORT =8080 || process.env.PORT;
+const PORT =process.env.PORT || 8080;
 
 app.get("/", (req, res) => {
     res.send("Server is running fine");
