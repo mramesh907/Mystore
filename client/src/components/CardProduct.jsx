@@ -7,7 +7,7 @@ const DisplayPriceInRupees = (price) => {
       currency: 'INR',
     }).format(price);
 }
-const CardProduct = ({data}) => {
+const CardProduct = ({data}) => {  
   const url = `/product/${validUrlConver(data?.name)}-${data?._id}`;
   return (
     <Link

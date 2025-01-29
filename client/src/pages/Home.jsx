@@ -16,7 +16,6 @@ const Home = () => {
       return subCategory?.category?.some(cat => cat.name === catname)
     });
     const url = `/${validUrlConver(catname)}-${id}/${validUrlConver(subcategory?.name)}-${subcategory?._id}`;
-    console.log(url);
     navigate(url)
 
   };

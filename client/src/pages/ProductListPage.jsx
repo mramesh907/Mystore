@@ -6,6 +6,7 @@ import SummaryApi from '../common/SummartApi';
 import Loading from '../components/Loading';
 import CardProduct from '../components/CardProduct';
 import { useSelector } from 'react-redux';
+import { validUrlConver } from '../utils/validUrlConver';
 
 const ProductListPage = () => {
   const params = useParams();
@@ -70,9 +71,12 @@ const ProductListPage = () => {
         {/* Subcategory */}
         <div className='cursor-pointer  min-h-[80vh] max-h-[80vh] overflow-y-scroll lg:py-4 grid gap-1 shadow-md scrollbarCustom sticky top-20 bg-blue-50'>
           {displaySubCategory.map((item) => {
+            const link = `/${validUrlConver(item?.category[0]?.name)}-${item?.category[0]?._id}/${validUrlConver(item?.name)}-${item?._id}`;
             return (
-              
-              <Link key={item._id} className={` p-2 w-full 
+              <Link
+                to={link}
+                key={item._id}
+                className={` p-2 w-full 
               hover:bg-blue-200
               cursor-pointer
               ${subCategoryId === item._id ? 'bg-green-100' : ''}
@@ -95,13 +99,15 @@ const ProductListPage = () => {
           <div className='bg-white shadow-md p-4'>
             <h3 className='font-semibold'>{subCategoryName}</h3>
           </div>
-          <div>
-            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 p-4'>
-              {data.map((item) => {
-                return <CardProduct key={item._id} data={item} />;
-              })}
+          <div className='min-h-[80vh] max-h-[80vh] overflow-y-auto'>
+            <div>
+              <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 p-4'>
+                {data.map((item) => {
+                  return <CardProduct key={item._id} data={item} />;
+                })}
+              </div>
+              {loading && <Loading />}
             </div>
-            {loading && <Loading />}
           </div>
         </div>
       </div>
