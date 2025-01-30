@@ -3,6 +3,7 @@ import auth from '../middleware/auth.middleware.js';
 import admin from '../middleware/admin.middleware.js';
 import {
   createProductController,
+  deleteProductController,
   getProductByCategoryAndSubCategoryController,
   getProductByCategoryController,
   getProductController,
@@ -19,5 +20,7 @@ productRouter.post('/get-product-by-category-and-sub-category', getProductByCate
 productRouter.post('/get-product-details', getProductDetailsController);
 
 productRouter.put('/update-product', auth,admin, updateProductController);
+
+productRouter.delete('/delete-product', auth, admin, deleteProductController);
 
 export default productRouter;

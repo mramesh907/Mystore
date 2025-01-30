@@ -222,3 +222,27 @@ export const updateProductController = async (req, res) => {
       .json({ message: error.message || error, success: false, error: true });
   }
 }
+
+export const deleteProductController = async (req, res) => {
+  try {
+    const { _id } = req.body;
+    if (!_id) {
+      return res.status(400).json({
+        message: 'Product id is required',
+        error: true,
+        success: false,
+      });
+    }
+    const deleteProduct = await ProductModel.findByIdAndDelete(_id);
+    return res.status(200).json({
+      message: 'Product deleted successfully',
+      success: true,
+      error: false,
+      data: deleteProduct,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || error, success: false, error: true });
+  }
+}
