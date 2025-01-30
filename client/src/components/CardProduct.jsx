@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { validUrlConver } from '../utils/validUrlConver';
+import { priceDiscount } from '../utils/PriceDiscount';
 const DisplayPriceInRupees = (price) => {
   const formattedPrice = new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -43,13 +44,17 @@ const CardProduct = ({data}) => {
 
       <div className='px-2 flex items-center justify-center gap-3 text-sm lg:text-base'>
         <div className='font-semibold text-sm'>
-          {DisplayPriceInRupees(data?.price)}
+          {DisplayPriceInRupees(priceDiscount(data?.price, data?.discount))}
         </div>
         <div className='font-semibold '>{data?.quantity}</div>
         <div>
-          <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
-            Add
-          </button>
+          {data?.stock > 0 ? (
+            <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
+              Add
+            </button>
+          ) : (
+            <p className='text-sm text-red-600 text-center'>Out of Stock</p>
+          )}
         </div>
       </div>
     </Link>

@@ -7,6 +7,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import minute_delivery from '../assets/minute_delivery.png';
 import Best_Prices_Offers from '../assets/Best_Prices_Offers.png';
 import Wide_Assortment from '../assets/Wide_Assortment.png';
+import { priceDiscount } from '../utils/PriceDiscount.js';
 const ProductDisplayPage = () => {
   const params = useParams();
   const [data, setData] = useState({
@@ -44,7 +45,6 @@ const ProductDisplayPage = () => {
       });
       if (response.data.success) {
         setData(response.data.data);
-        console.log('response.data.data',data);
         
       }
     } catch (error) {
@@ -62,7 +62,7 @@ const ProductDisplayPage = () => {
     <section className='container mx-auto p-4 grid lg:grid-cols-2 gap-4'>
       {/* Image Section */}
       <div className='flex flex-col justify-center items-center'>
-        <div className='w-full max-w-md h-[72vh] relative'>
+        <div className='w-full max-w-md h-[72vh] relative bg-white hover:shadow-lg'>
           <img
             src={data?.image[image]}
             alt='Product'
@@ -84,7 +84,7 @@ const ProductDisplayPage = () => {
               </button>
 
               {/* Thumbnails */}
-              <div className='flex gap-2 mx-auto overflow-x-auto no-scrollbar w-[80%]'>
+              <div className='flex gap-2 mx-auto overflow-x-auto scrollbar-none w-[80%]'>
                 {data?.image?.map((item, index) => (
                   <img
                     src={item}
@@ -109,6 +109,27 @@ const ProductDisplayPage = () => {
             </div>
           )}
         </div>
+        <div className='my-4 grid gap-3'>
+          <div>
+            <p className='font-semibold'>Product Details</p>
+            <p className='font-medium'>Description</p>
+            <p className='text-sm'>{data?.description}</p>
+          </div>
+          <div>
+            <p className='font-medium'>Unit</p>
+            <p className='text-sm'>{data?.unit}</p>
+          </div>
+          <p className='font-semibold'>Key Features</p>
+          {data?.moreDetails &&
+            Object.keys(data?.moreDetails).length > 0 &&
+            Object.keys(data?.moreDetails).map((key, index) => (
+              <div key={index}>
+                <p className='font-normal'>
+                  {key}:{data?.moreDetails[key]}
+                </p>
+              </div>
+            ))}
+        </div>
       </div>
 
       {/* Product Details Section */}
@@ -119,13 +140,32 @@ const ProductDisplayPage = () => {
         <p className='text-lg bg-green-300 px-2 py-1 w-fit rounded-md'>
           {data?.unit}
         </p>
-        <p className='text-lg'>Price</p>
-        <p className='text-xl font-semibold text-gray-700 border border-green-300 px-2 py-1 w-fit rounded-md'>
-          {DisplayPriceInRupees(data?.price)}
-        </p>
+        <div>
+          <p className='text-lg'>Price</p>
+          <div className='flex items-center space-x-2'>
+            {/* Discounted price */}
+            <p className='text-xl font-semibold text-gray-700 border border-green-300 px-2 py-1 w-fit rounded-md'>
+              {DisplayPriceInRupees(priceDiscount(data?.price, data?.discount))}
+            </p>
+            {/* MRP with strikethrough */}
+            <p className='text-sm text-gray-500'>MRP</p>
+            <p className='text-xl font-semibold text-gray-500 line-through'>
+              {DisplayPriceInRupees(data?.price)}
+            </p>
+
+            {/* Discount Percentage */}
+            {data?.discount > 0 && (
+              <p className='text-semibold text-white bg-primary-100 px-2 py-1 w-fit rounded-md'>
+                {data?.discount}% OFF
+              </p>
+            )}
+          </div>
+          <p className='text-sm text-gray-500'>Inclusive of all taxes</p>
+        </div>
+
         {data?.stock > 0 ? (
           <>
-            <p className='text-lg'>In Stock</p>
+            {/* <p className='text-lg'>In Stock</p> */}
             <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
               Add
             </button>
