@@ -1,19 +1,27 @@
-import React from 'react'
+import React from 'react';
 
 const CardLoading = () => {
   return (
-    <div className='border border-gray-300 p-4 grid gap-3 max-w-32 lg:max-w-52 rounded animate-pulse'>
-      <div className='min-h-14 lg:min-h-20 bg-white rounded'></div>
-      <div className='p-2 lg:p-3 bg-slate-200 rounded w-20'></div>
-      <div className='p-2 lg:p-3 bg-white rounded-md'></div>
-      <div className='p-2 lg:p-3 bg-white rounded-md w-14'></div>
+    <div className='border border-gray-300 p-4 grid gap-3 max-w-xs lg:max-w-sm rounded-lg animate-pulse'>
+      {/* Placeholder for Image */}
+      <div className='min-h-24 lg:min-h-32 bg-gray-200 rounded-md'></div>
 
-      <div className='flex items-center justify-center gap-3'>
-        <div className='p-2 lg:p-3 bg-white rounded-md w-20'></div>
-        <div className='p-2 lg:p-3 bg-white rounded-md w-20'></div>
+      {/* Placeholder for Title */}
+      <div className='p-2 bg-gray-200 rounded-md w-24'></div>
+
+      {/* Placeholder for Description */}
+      <div className='p-2 bg-gray-200 rounded-md w-full'></div>
+
+      {/* Placeholder for Price or other info */}
+      <div className='p-2 bg-gray-200 rounded-md w-20'></div>
+
+      {/* Placeholder for Action Buttons */}
+      <div className='flex items-center justify-between gap-3'>
+        <div className='p-2 bg-gray-200 rounded-md w-20'></div>
+        <div className='p-2 bg-gray-200 rounded-md w-20'></div>
       </div>
     </div>
   );
-}
+};
 
-export default CardLoading
+export default CardLoading;

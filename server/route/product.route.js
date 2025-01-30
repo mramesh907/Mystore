@@ -8,6 +8,7 @@ import {
   getProductByCategoryController,
   getProductController,
   getProductDetailsController,
+  searchProductController,
   updateProductController,
 } from '../controllers/product.controller.js';
 
@@ -22,5 +23,7 @@ productRouter.post('/get-product-details', getProductDetailsController);
 productRouter.put('/update-product', auth,admin, updateProductController);
 
 productRouter.delete('/delete-product', auth, admin, deleteProductController);
+
+productRouter.post('/search-product', searchProductController);
 
 export default productRouter;

@@ -24,7 +24,7 @@ const CardProduct = ({data}) => {
   return (
     <Link
       to={url}
-      className='border py-2 lg:p-4 grid lg:gap-3 gap-1 lg:min-w-52  min-w-36 rounded cursor-pointer border-gray-300 bg-white'>
+      className='border py-2 lg:p-4 grid lg:gap-3 gap-1 lg:min-w-52  min-w-36 rounded cursor-pointer border-gray-400 bg-white'>
       <div className='min-h-20 w-full max-h-24 lg:max-h-24 rounded bg-blue-50 overflow-hidden'>
         <img
           src={data?.image[0]}
