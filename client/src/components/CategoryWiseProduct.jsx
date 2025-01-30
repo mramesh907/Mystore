@@ -50,13 +50,31 @@ const CategoryWiseProduct = ({ id, name }) => {
       container.scrollLeft -= 200;
     }
   };  
+  // const handleRedirectProductListPage = () => {
+  //   console.log('subcategory',subCategoryData);
+    
+  //   const subcategory = subCategoryData?.find((subCategory) => {
+  //     return subCategory?.category?.some((cat) => cat._id === id);
+  //   });
+  //   const url = `/${validUrlConver(name)}-${id}/${validUrlConver(subcategory?.name)}-${subcategory?._id}`;
+  //   return url
+  // };
   const handleRedirectProductListPage = () => {
-    const subcategory = subCategoryData?.find((subCategory) => {
-      return subCategory?.category?.some((cat) => cat._id === id);
+    if (!subCategoryData || !Array.isArray(subCategoryData)) return '/';
+
+    const subcategory = subCategoryData.find((sub) => {
+      return sub.category.some((c) => c._id === id);
     });
-    const url = `/${validUrlConver(name)}-${id}/${validUrlConver(subcategory?.name)}-${subcategory?._id}`;
-    return url
+
+    if (!subcategory || !subcategory.name) {
+      console.warn('Subcategory or name not found');
+      return '/';
+    }
+
+    const url = `/${validUrlConver(name)}-${id}/${validUrlConver(subcategory.name)}-${subcategory._id}`;
+    return url;
   };
+
   const redirectURL = handleRedirectProductListPage()
   return (
     <div>

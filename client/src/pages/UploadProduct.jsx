@@ -352,7 +352,7 @@ const UploadProduct = () => {
               onChange={handleChange}
               value={data.stock}
             />
-          </div>
+          </div> 
           {/* Product Price */}
           <div className='grid gap-1'>
             <label htmlFor='price'>Price</label>
