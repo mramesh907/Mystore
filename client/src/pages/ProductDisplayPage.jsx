@@ -45,7 +45,6 @@ const ProductDisplayPage = () => {
       });
       if (response.data.success) {
         setData(response.data.data);
-        
       }
     } catch (error) {
       AxiosToastError(error);
@@ -119,16 +118,18 @@ const ProductDisplayPage = () => {
             <p className='font-medium'>Unit</p>
             <p className='text-sm'>{data?.unit}</p>
           </div>
-          <p className='font-semibold'>Key Features</p>
-          {data?.moreDetails &&
-            Object.keys(data?.moreDetails).length > 0 &&
-            Object.keys(data?.moreDetails).map((key, index) => (
-              <div key={index}>
-                <p className='font-normal'>
-                  {key}:{data?.moreDetails[key]}
-                </p>
-              </div>
-            ))}
+          {data?.moreDetails && Object.keys(data?.moreDetails).length > 0 && (
+            <div>
+              <p className='font-semibold'>Key Features</p>
+              {Object.entries(data.moreDetails).map(([key, value], index) => (
+                <div key={index}>
+                  <p className='font-normal'>
+                    {key}: {value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
