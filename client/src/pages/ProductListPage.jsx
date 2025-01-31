@@ -69,7 +69,7 @@ const ProductListPage = () => {
     <section className='sticky top-24 lg:top-20'>
       <div className='container sticky top-24  mx-auto grid grid-cols-[90px,1fr] md:grid-cols-[200px,1fr] lg:grid-cols-[280px,1fr]'>
         {/* Subcategory */}
-        <div className='cursor-pointer  min-h-[80vh] max-h-[80vh] overflow-y-scroll lg:py-4 grid gap-1 shadow-md scrollbarCustom sticky top-20 bg-blue-50'>
+        <div className='cursor-pointer  min-h-[80vh] max-h-[80vh] overflow-y-scroll lg:py-4 grid gap-1 shadow-md scrollbarCustom sticky top-20 bg-blue-50 overflow-x-hidden'>
           {displaySubCategory.map((item) => {
             const link = `/${validUrlConver(item?.category[0]?.name)}-${item?.category[0]?._id}/${validUrlConver(item?.name)}-${item?._id}`;
             return (
