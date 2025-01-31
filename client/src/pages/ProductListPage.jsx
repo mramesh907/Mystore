@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 import CardProduct from '../components/CardProduct';
 import { useSelector } from 'react-redux';
 import { validUrlConver } from '../utils/validUrlConver';
-
+import noData from '../assets/nothing here yet.webp';
 const ProductListPage = () => {
   const params = useParams();
   const [data, setData] = useState([]);
@@ -38,10 +38,14 @@ const ProductListPage = () => {
       const { data: responseData } = response;
 
       if (responseData.success) {
+        console.log('responseData', responseData);
+
         if (responseData.page == 1) {
           setData(responseData.data);
-        } else {
+        } else if (responseData.data && responseData.data.length > 0) {
           setData([...data, ...responseData.data]);
+        } else {
+          setData([]);
         }
         setTotalPages(responseData.totalCount);
       }
@@ -106,6 +110,18 @@ const ProductListPage = () => {
                   return <CardProduct key={item._id} data={item} />;
                 })}
               </div>
+              {!data[0] && !loading && (
+                <div className='flex flex-col items-center justify-center w-fit mx-auto'>
+                  <img
+                    src={noData}
+                    alt='no data'
+                    className='w-1/2 h-1/2 object-contain'
+                  />
+                  <p className='text-center text-neutral-500 font-semibold'>
+                    No products available for this subcategory.
+                  </p>
+                </div>
+              )}
               {loading && <Loading />}
             </div>
           </div>
