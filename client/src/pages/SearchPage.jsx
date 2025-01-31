@@ -5,13 +5,17 @@ import Axios from '../utils/Axios';
 import AxiosToastError from '../utils/AxiosToastError';
 import CardProduct from '../components/CardProduct';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
+import { useLocation } from 'react-router-dom';
+import noData from '../assets/nothing here yet.webp';
 const SearchPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const loadingArrayCard = new Array(10).fill(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const params = useLocation();
+  const searchText=params?.search?.slice(3);
+
 
   const fetchProductData = async () => {
     try {
@@ -21,17 +25,22 @@ const SearchPage = () => {
         data: {
           page: page,
           // limit: 12,
-          search: '',
+          search: searchText,
         },
       });
-      const { data: responseData } = response;
-
+      const { data: responseData } = response;      
       if (responseData.success) {
         if (responseData.page == 1) {
           setData(responseData.data);
           setTotalPages(responseData.page);
         } else {
-          setData([...data, ...responseData.data]);
+          if(responseData.data && responseData.data.length>0){
+            setData((preve) => {
+              return [...preve, ...responseData.data];
+            });
+          }else{
+            setData([])
+          }
           setTotalPages(responseData.page);
         }
       }
@@ -43,7 +52,11 @@ const SearchPage = () => {
   };
   useEffect(() => {
     fetchProductData();
-  }, [page]);
+  }, [page,searchText]);
+  useEffect(() => {
+    setData([]); // Clear old data
+    setPage(1); // Reset the page
+  }, [searchText]);
 
   const handleFetchMore = () => {
     if (page < totalPages) {
@@ -67,8 +80,13 @@ const SearchPage = () => {
           hasMore={true}
           next={handleFetchMore}>
           <div className='grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 py-4 lg:grid-cols-5'>
-            {data.map((product) => {
-              return <CardProduct key={product._id} data={product} />;
+            {data.map((product, index) => {
+              return (
+                <CardProduct
+                  key={product._id || product.id + index}
+                  data={product}
+                />
+              );
             })}
 
             {/* loading Data */}
@@ -78,6 +96,16 @@ const SearchPage = () => {
               })}
           </div>
         </InfiniteScroll>
+        {!data[0] && !loading && (
+          <div className='flex flex-col items-center justify-center w-fit mx-auto'>
+            <img
+              src={noData}
+              alt='no data'
+              className='w-1/2 h-1/2 object-contain'
+            />
+            <p className='text-center text-neutral-500 font-semibold'>No Data</p>
+          </div>
+        )}
       </div>
     </section>
   );

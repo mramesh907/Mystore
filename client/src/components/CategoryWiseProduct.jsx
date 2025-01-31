@@ -66,12 +66,12 @@ const CategoryWiseProduct = ({ id, name }) => {
       return sub.category.some((c) => c._id === id);
     });
 
-    if (!subcategory || !subcategory.name) {
-      console.warn('Subcategory or name not found');
-      return '/';
-    }
+    // if (!subcategory || !subcategory.name) {
+    //   console.warn('Subcategory or name not found');
+    //   return '/';
+    // }
 
-    const url = `/${validUrlConver(name)}-${id}/${validUrlConver(subcategory.name)}-${subcategory._id}`;
+    const url = `/${validUrlConver(name)}-${id}/${validUrlConver(subcategory?.name)}-${subcategory?._id}`;
     return url;
   };
 
