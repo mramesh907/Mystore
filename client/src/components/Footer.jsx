@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className='border-t '>
       <div className='container mx-auto p-4 text-center flex flex-col lg:flex-row   lg:justify-between gap-2 '>
-        <p>© All Rights Reserved {new Date().getFullYear()}</p>
+        <p>© All Rights Reserved 2023 - {new Date().getFullYear()}</p>
 
         {/* Social media icons */}
         <div className='flex gap-4 items-center justify-center text-2xl'>
