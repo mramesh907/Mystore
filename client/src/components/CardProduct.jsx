@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { validUrlConver } from '../utils/validUrlConver';
 import { priceDiscount } from '../utils/PriceDiscount';
-const DisplayPriceInRupees = (price) => {
+
+import AddToCartBtn from './AddToCartBtn.jsx';
+
+const CardProduct = ({ data }) => {
+  const url = `/product/${validUrlConver(data?.name)}-${data?._id}`;
+  const DisplayPriceInRupees = (price) => {
   const formattedPrice = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
@@ -10,7 +15,6 @@ const DisplayPriceInRupees = (price) => {
 
   const rupeeSymbol = formattedPrice.slice(0, 1); // Extract the `₹` symbol
   const remainingText = formattedPrice.slice(1); // Extract the rest of the price
-
   return (
     <span>
       <span style={{ fontFamily: 'Arial, sans-serif' }}>{rupeeSymbol}</span>
@@ -18,9 +22,6 @@ const DisplayPriceInRupees = (price) => {
     </span>
   );
 };
-
-const CardProduct = ({data}) => {  
-  const url = `/product/${validUrlConver(data?.name)}-${data?._id}`;
   return (
     <Link
       to={url}
@@ -49,9 +50,12 @@ const CardProduct = ({data}) => {
         <div className='font-semibold '>{data?.quantity}</div>
         <div>
           {data?.stock > 0 ? (
-            <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
-              Add
-            </button>
+            // <button
+            //   // onClick={handleAddToCart}
+            //   className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
+            //   Add
+            // </button>
+            <AddToCartBtn data={data} />
           ) : (
             <p className='text-sm text-red-600 text-center'>Out of Stock</p>
           )}
@@ -59,6 +63,6 @@ const CardProduct = ({data}) => {
       </div>
     </Link>
   );
-}
+};
 
-export default CardProduct
+export default CardProduct;

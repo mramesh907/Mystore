@@ -8,6 +8,7 @@ import minute_delivery from '../assets/minute_delivery.png';
 import Best_Prices_Offers from '../assets/Best_Prices_Offers.png';
 import Wide_Assortment from '../assets/Wide_Assortment.png';
 import { priceDiscount } from '../utils/PriceDiscount.js';
+import AddToCartBtn from '../components/AddToCartBtn.jsx';
 const ProductDisplayPage = () => {
   const params = useParams();
   const [data, setData] = useState({
@@ -75,7 +76,7 @@ const ProductDisplayPage = () => {
             <div className='relative w-full flex items-center'>
               {/* Left Button */}
               <button
-                className='absolute left-0 bg-white p-2 rounded-full shadow-md z-10'
+                className='absolute left-0 bg-white p-2 rounded-full shadow-md'
                 onClick={() =>
                   setImage(image > 0 ? image - 1 : data?.image.length - 1)
                 }>
@@ -99,7 +100,7 @@ const ProductDisplayPage = () => {
 
               {/* Right Button */}
               <button
-                className='absolute right-0 bg-white p-2 rounded-full shadow-md z-10'
+                className='absolute right-0 bg-white p-2 rounded-full shadow-md'
                 onClick={() =>
                   setImage(image < data?.image.length - 1 ? image + 1 : 0)
                 }>
@@ -167,9 +168,10 @@ const ProductDisplayPage = () => {
         {data?.stock > 0 ? (
           <>
             {/* <p className='text-lg'>In Stock</p> */}
-            <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
+            {/* <button className='bg-green-600 text-white px-2 lg:px-4 py-2 rounded hover:bg-green-700'>
               Add
-            </button>
+            </button> */}
+            <AddToCartBtn data={data} />
           </>
         ) : (
           <p className='text-lg text-red-600'>Out of Stock</p>

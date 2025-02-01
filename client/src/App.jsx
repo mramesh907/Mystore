@@ -14,10 +14,10 @@ import {
 import { useDispatch } from 'react-redux';
 import Axios from './utils/Axios';
 import SummaryApi from './common/SummartApi';
-
+import { GlobalProvider } from './provider/globalProvider.jsx';
+import CartMobile from './components/CartMobile.jsx';
 function App() {
   const dispatch = useDispatch();
-
   // const fetchUser = async () => {
   //   const userData = await fetchUserDetails();
   //   dispatch(setUserDetails(userData?.data));
@@ -46,7 +46,7 @@ function App() {
         dispatch(setAllCategory(responseData.data));
       }
     } catch (error) {
-    }finally{
+    } finally {
       dispatch(setLoadingCategory(false));
     }
   };
@@ -54,30 +54,30 @@ function App() {
   const fetchSubCategory = async () => {
     try {
       const response = await Axios({
-        ...SummaryApi.getSubCategory
+        ...SummaryApi.getSubCategory,
       });
       const { data: responseData } = response;
       if (responseData.success) {
         dispatch(setAllSubCategory(responseData.data));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchUser();
     fetchCategory();
     fetchSubCategory();
   }, []);
   return (
-    <>
+    <GlobalProvider>
       <Header />
       <main className='min-h-[80vh]'>
         <Outlet />
       </main>
       <Footer />
       <Toaster />
-    </>
+      <CartMobile />
+    </GlobalProvider>
   );
 }
 

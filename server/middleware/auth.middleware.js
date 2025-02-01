@@ -26,7 +26,8 @@ const auth = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
-      message: error.message || error,
+      // message: error.message || error,
+      message: "You have not logged in",
       error: true,
       success: false,
     });
