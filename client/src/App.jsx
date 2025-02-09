@@ -77,7 +77,11 @@ function App() {
       </main>
       <Footer />
       <Toaster />
-      {location.pathname !== '/checkout' && <CartMobile />}
+      {location.pathname !== '/checkout' && location.pathname !== '/success' &&
+      location.pathname !== '/cancel' &&
+      location.pathname !== '/successpayment' &&
+      location.pathname !== '/cancelpayment'
+      && <CartMobile />}
     </GlobalProvider>
   );
 }

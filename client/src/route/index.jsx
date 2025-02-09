@@ -24,6 +24,8 @@ import CartMobile from '../pages/CartMobile';
 import CheckoutPage from '../pages/CheckoutPage';
 import Success from '../pages/Success';
 import Cancel from '../pages/Cancel';
+import CancelPayment from '../pages/CancelPayment';
+import SuccessPayment from '../pages/SuccessPayment';
 const router = createBrowserRouter(
   [
     {
@@ -143,7 +145,16 @@ const router = createBrowserRouter(
         {
           path:'cancel',
           element: <Cancel/>
-        }
+        },
+        {
+          path:'successpayment',
+          element: <SuccessPayment/>
+        },
+        {
+          path:'cancelpayment',
+          element: <CancelPayment/>
+        },
+
       ],
     },
   ],

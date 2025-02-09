@@ -154,5 +154,9 @@ const SummaryApi = {
     url: '/api/order/cash-on-delivery',
     method: 'post',
   },
+  onlinePayment: {
+    url: '/api/order/razorpay',
+    method: 'post',
+  },
 };
 export default SummaryApi;

@@ -8,7 +8,7 @@ import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummartApi';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import { date } from 'yup';
+import {loadStripe} from "@stripe/stripe-js";;
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { withoutDiscount, totalPrice, totalItems, fetchCartItems } =
@@ -62,6 +62,29 @@ const CheckoutPage = () => {
           },
         });
       }
+    } catch (error) {
+      console.log(error);
+      
+      AxiosToastError(error);
+    }
+  };
+  const handleOnlinePayment = async () => {
+    try {
+      toast.loading('Redirecting to payment page...');
+      const VITE_STRIPE_PUBLISHABLE_KEY = import.meta.env
+        .VITE_STRIPE_PUBLISHABLE_KEY;
+      const stripe = await loadStripe(VITE_STRIPE_PUBLISHABLE_KEY);
+      const response = await Axios({
+        ...SummaryApi.onlinePayment,
+        data: {
+          list_items: cartItemList,
+          deliveryAddress: addresslist[selectedAddress]?._id,
+          totalAmt: totalPrice,
+          subTotalAmt: totalPrice,
+        },
+      })
+      const { data: responseData } = response;
+      stripe.redirectToCheckout({ sessionId: responseData.id });
     } catch (error) {
       console.log(error);
       
@@ -202,7 +225,9 @@ const CheckoutPage = () => {
 
         {/* Payment Options */}
         <div className='mt-6 flex flex-col gap-3 items-center'>
-          <button className='w-full max-w-md py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition'>
+          <button
+          onClick={handleOnlinePayment}
+          className='w-full max-w-md py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition'>
             Online Payment
           </button>
           <button
