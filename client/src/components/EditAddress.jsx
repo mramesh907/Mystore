@@ -33,6 +33,8 @@ const EditAddress = ({ close ,data}) => {
   } = useForm({
     resolver: yupResolver(addressSchema),
     defaultValues: {
+      _id: data._id,
+      userId: data.userId,
       addressLine: data.addressLine,
       city: data.city,
       state: data.state,
@@ -46,8 +48,10 @@ const EditAddress = ({ close ,data}) => {
   const onSubmit = async(data) => {
    try {
     const response = await Axios({
-      ...SummaryApi.addAddress,
+      ...SummaryApi.updateAddress,
       data: {
+        _id: data._id,
+        userId: data.userId,
         addressLine: data.addressLine,
         city: data.city,
         state: data.state,

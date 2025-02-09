@@ -142,5 +142,13 @@ const SummaryApi = {
     url: '/api/address/get-address',
     method: 'get',
   },
+  updateAddress: {
+    url: '/api/address/update-address',
+    method: 'put',
+  },
+  deleteAddress: {
+    url: '/api/address/delete-address',
+    method: 'put',
+  },
 };
 export default SummaryApi;

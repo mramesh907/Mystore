@@ -42,7 +42,9 @@ const CheckoutPage = () => {
           <div>
             {addresslist?.length > 0 ? (
               addresslist.map((item, index) => (
-                <label htmlFor={'item' + index}>
+                <label
+                  className={`${!item?.status && 'hidden'}`}
+                  htmlFor={'item' + index}>
                   <div
                     key={index}
                     className='mt-2 bg-white rounded-lg border border-gray-300 p-4 shadow-sm cursor-pointer hover:bg-gray-200 transition flex flex-col gap-1'>
