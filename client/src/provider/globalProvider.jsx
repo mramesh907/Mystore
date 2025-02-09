@@ -6,6 +6,7 @@ import { addProduct } from '../store/cartProduct';
 import AxiosToastError from '../utils/AxiosToastError';
 import toast from 'react-hot-toast';
 import { priceDiscount } from '../utils/PriceDiscount';
+import { setAddress } from '../store/addressSlice';
 export const GlobalContext = createContext();
 
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -16,6 +17,7 @@ export const GlobalProvider = ({ children }) => {
   const [withoutDiscount, setWithoutDiscount] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const cartItem = useSelector((state) => state?.cartProduct?.cartProduct);
+  const user = useSelector((state) => state?.user);
   const fetchCartItems = async () => {
     try {
       const response = await Axios({
@@ -64,10 +66,24 @@ export const GlobalProvider = ({ children }) => {
       AxiosToastError(error);
     }
   };
+  const fetchaddress = async()=>{
+    try {
+      const response = await Axios({
+        ...SummaryApi.getAddress,
+      })
+      const {data : responseData} = response
+      if(responseData.success){
+        dispatch(setAddress(responseData.data))
+      }
+    } catch (error) {
+      AxiosToastError(error)
+    }
+  }
 
   useEffect(() => {
     fetchCartItems();
-  }, []);
+    fetchaddress()
+  }, [user]);
   useEffect(() => {
     const totalItems = cartItem.reduce(
       (total, item) => total + item.quantity,
@@ -99,6 +115,7 @@ export const GlobalProvider = ({ children }) => {
         totalPrice,
         totalItems,
         withoutDiscount,
+        fetchaddress
       }}>
       {children}
     </GlobalContext.Provider>

@@ -29,6 +29,7 @@ const UserMenu = ({ close }) => {
         localStorage.clear();
         toast.success(response.data.message);
         navigate('/');
+        window.location.reload();
       }
     } catch (error) {
       AxiosToastError(error);

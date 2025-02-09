@@ -1,3 +1,5 @@
+
+
 export const baseURL = import.meta.env.VITE_API_URL;
 
 const SummaryApi = {
@@ -131,6 +133,14 @@ const SummaryApi = {
   deleteCartItem: {
     url: '/api/cart/remove-from-cart',
     method: 'delete',
+  },
+  addAddress: {
+    url: '/api/address/add-address',
+    method: 'post',
+  },
+  getAddress: {
+    url: '/api/address/get-address',
+    method: 'get',
   },
 };
 export default SummaryApi;

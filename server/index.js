@@ -12,6 +12,7 @@ import uploadRouter from "./route/upload.route.js";
 import subCategoryRouter from "./route/subCategory.route.js";
 import productRouter from "./route/product.route.js";
 import cartRouter from "./route/cart.route.js";
+import addressRouter from "./route/address.route.js";
 const app = express();
 app.use(
   cors({
@@ -40,6 +41,7 @@ app.use('/api/file', uploadRouter);
 app.use('/api/subcategory', subCategoryRouter);
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/address', addressRouter);
 // async methods returns promise 
 connectDB().then(()=>{
     app.on("error", (error) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { IoClose } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../provider/globalProvider';
 import { FaCaretRight } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import AddToCartBtn from './AddToCartBtn';
 import emptyCart from '../assets/empty_cart.webp'
 const DisplayCartItem = ({ close }) => {
   const { withoutDiscount, totalPrice, totalItems } = useGlobalContext();
+  const user = useSelector((state) => state?.user);  
   const cartItem = useSelector((state) => state?.cartProduct?.cartProduct);
   const DisplayPriceInRupees = (price) => {
     const formattedPrice = new Intl.NumberFormat('en-IN', {
@@ -25,6 +26,22 @@ const DisplayCartItem = ({ close }) => {
         </span>
       </span>
     );
+  };
+  const navigate = useNavigate();
+  const redirectToCheckoutPage = () => {
+    if (user._id) {
+      navigate('/checkout');
+      if(close){
+        close();
+      }
+      return '/checkout';
+    } else {
+      navigate('/login');
+       if (close) {
+         close();
+       }
+      return '/login';
+    }
   };
   return (
     <section className='bg-neutral-900 fixed top-0 bottom-0 left-0 right-0 bg-opacity-70 z-40'>
@@ -112,32 +129,37 @@ const DisplayCartItem = ({ close }) => {
                   </h3>
                   <div className='flex justify-between items-center'>
                     <p className='text-center text-white font-semibold'>
-                       Items Total
+                      Total Items
                     </p>
                     <p className='flex items-center gap-2'>
-                    <span className='line-through text-neutral-300'>{DisplayPriceInRupees(withoutDiscount)}</span>
-                    <span className='text-white font-semibold'>{DisplayPriceInRupees(totalPrice)}</span>
+                      <span className='text-white font-semibold'>
+                        {totalItems} item
+                      </span>
+                    </p>
+                  </div>
+                  <div className='flex justify-between items-center'>
+                    <p className='text-center text-white font-semibold'>
+                      Items Total
+                    </p>
+                    <p className='flex items-center gap-2'>
+                      <span className='line-through text-neutral-300'>
+                        {DisplayPriceInRupees(withoutDiscount)}
+                      </span>
+                      <span className='text-white font-semibold'>
+                        {DisplayPriceInRupees(totalPrice)}
+                      </span>
                     </p>
                     {/* <p className='text-center text-white font-semibold'>
                       {DisplayPriceInRupees(withoutDiscount)}
                     </p> */}
                   </div>
+
                   <div className='flex justify-between items-center'>
                     <p className='text-center text-white font-semibold'>
-                        Total Items
+                      Delivery Charge
                     </p>
                     <p className='flex items-center gap-2'>
-                    
-                    <span className='text-white font-semibold'>{totalItems} item</span>
-                    </p>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-center text-white font-semibold'>
-                        Delivery Charge
-                    </p>
-                    <p className='flex items-center gap-2'>
-                    
-                    <span className='text-white font-semibold'>Free</span>
+                      <span className='text-white font-semibold'>Free</span>
                     </p>
                   </div>
                 </div>
@@ -145,7 +167,10 @@ const DisplayCartItem = ({ close }) => {
             </div>
             <div className='flex justify-between items-center p-2 py-4 shadow-md bg-green-700 text-neutral-100 sticky bottom-3 rounded mt-4'>
               <div>{DisplayPriceInRupees(totalPrice)}</div>
-              <button className='flex items-center gap-2'>
+
+              <button
+                onClick={redirectToCheckoutPage}
+                className='flex items-center gap-2'>
                 Proceed
                 <span>
                   <FaCaretRight />
