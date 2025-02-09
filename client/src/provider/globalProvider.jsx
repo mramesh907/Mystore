@@ -7,6 +7,7 @@ import AxiosToastError from '../utils/AxiosToastError';
 import toast from 'react-hot-toast';
 import { priceDiscount } from '../utils/PriceDiscount';
 import { setAddress } from '../store/addressSlice';
+import { addOrder } from '../store/orderSlice';
 export const GlobalContext = createContext();
 
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -79,10 +80,24 @@ export const GlobalProvider = ({ children }) => {
       AxiosToastError(error)
     }
   }
+  const fetchOrder = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getOrder,
+      })
+      const {data : responseData} = response
+      if(responseData.success){
+        dispatch(addOrder(responseData.data))
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     fetchCartItems();
     fetchaddress()
+    fetchOrder();
   }, [user]);
   useEffect(() => {
     const totalItems = cartItem.reduce(

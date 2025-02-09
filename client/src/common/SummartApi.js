@@ -1,5 +1,4 @@
 
-
 export const baseURL = import.meta.env.VITE_API_URL;
 
 const SummaryApi = {
@@ -157,6 +156,10 @@ const SummaryApi = {
   onlinePayment: {
     url: '/api/order/razorpay',
     method: 'post',
+  },
+  getOrder: {
+    url: '/api/order/get-order',
+    method: 'get',
   },
 };
 export default SummaryApi;

@@ -5,11 +5,11 @@ import ProductModel from '../models/product.model.js';
 import mongoose from 'mongoose';
 import Stripe from '../config/stripe.js';
 
-export const  CashOnDeliveryController=async(req, res)=> {
-  try {    
-    const  userId  = req.userId;
+export const CashOnDeliveryController = async (req, res) => {
+  try {
+    const userId = req.userId;
     const { list_items, totalAmt, deliveryAddress, subTotalAmt } = req.body;
-   if (!userId) {
+    if (!userId) {
       return res
         .status(400)
         .json({ message: 'User id is required', success: false, error: true });
@@ -55,7 +55,6 @@ export const  CashOnDeliveryController=async(req, res)=> {
       });
     }
 
-
     const order = await OrderModel.insertMany(payload);
 
     if (!order) {
@@ -81,20 +80,18 @@ export const  CashOnDeliveryController=async(req, res)=> {
         .json({ message: 'Something went wrong', success: false, error: true });
     }
 
-    return res
-      .status(200)
-      .json({
-        message: 'Order placed successfully',
-        data: order,
-        success: true,
-        error: false,
-      });
+    return res.status(200).json({
+      message: 'Order placed successfully',
+      data: order,
+      success: true,
+      error: false,
+    });
   } catch (error) {
     return res
       .status(500)
       .json({ message: error.message || error, success: false, error: true });
   }
-}
+};
 
 export const priceDiscount = (price, discount = 1) => {
   const discountedPrice = Math.ceil((Number(price) * Number(discount)) / 100);
@@ -102,17 +99,17 @@ export const priceDiscount = (price, discount = 1) => {
   return totalPrice;
 };
 
-export const paymentController=async(req, res)=>{
+export const paymentController = async (req, res) => {
   try {
     const userId = req.userId;
-    const user= await UserModel.findById(userId);
-     const { list_items, totalAmt, deliveryAddress, subTotalAmt } = req.body;
+    const user = await UserModel.findById(userId);
+    const { list_items, totalAmt, deliveryAddress, subTotalAmt } = req.body;
     if (!list_items || !totalAmt || !deliveryAddress || !subTotalAmt) {
       return res
         .status(400)
         .json({ message: 'Provide all fields', success: false, error: true });
     }
-    const line_items = list_items.map((item) => ({      
+    const line_items = list_items.map((item) => ({
       price_data: {
         currency: 'inr',
         product_data: {
@@ -122,10 +119,8 @@ export const paymentController=async(req, res)=>{
             productId: item.productId?._id,
           },
         },
-        unit_amount: priceDiscount(
-          item.productId?.price,
-          item.productId?.discount
-        )*100,
+        unit_amount:
+          priceDiscount(item.productId?.price, item.productId?.discount) * 100,
       },
       // adjustable_quantity: { enabled: true,minimum:1 },
       quantity: item.quantity,
@@ -150,6 +145,99 @@ export const paymentController=async(req, res)=>{
     const session = await Stripe.checkout.sessions.create(params);
 
     return res.status(200).json(session);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || error, success: false, error: true });
+  }
+};
+
+const getOrderProductItems = async ({
+  lineItems,
+  userId,
+  addressId,
+  paymentId,
+  payment_status,
+}) => {
+  const productList = [];
+  if (lineItems?.data?.length) {
+    for (const item of lineItems?.data) {
+      const product = await Stripe.products.retrieve(item.price.product);
+      const payload = {
+        userId: userId,
+        orderId: `ORDER-${new mongoose.Types.ObjectId()}`,
+        productId: product.metadata.productId,
+        productDetails: {
+          name: product.name,
+          image: product.images,
+        },
+        paymentId: paymentId,
+        paymentStatus: payment_status,
+        deliveryAddress: addressId,
+        subTotalAmt: Number(item.amount_total / 100),
+        totalAmt: Number(item.amount_total / 100),
+      };
+      productList.push(payload);
+    }
+  }
+  return productList;
+};
+
+export async function webhookStripe(req, res) {
+  const event = req.body;
+  const endPointSecret = process.env.STRIPE_ENDPOINT_WEBHOOK_SECRET;
+
+  // Handle the event
+  switch (event.type) {
+    case 'checkout.session.completed':
+      const session = event.data.object;
+      const lineItems = await Stripe.checkout.sessions.listLineItems(
+        session.id
+      );
+      const userId = session.metadata.userId;
+
+      const orderProduct = await getOrderProductItems({
+        lineItems: lineItems,
+        userId: userId,
+        addressId: session.metadata.deliveryAddress,
+        paymentId: session.payment_intent,
+        payment_status: session.payment_status,
+      });
+      const order = await OrderModel.insertMany(orderProduct);
+      if (Boolean(order[0])) {
+        const removeCartItems = await UserModel.findByIdAndUpdate(userId, {
+          shoppingCart: [],
+        });
+        const removeCartProductDB = await CartProductModel.deleteMany({
+          userId: userId,
+        });
+      } else {
+        return res.status(400).json({
+          message: 'Something went wrong',
+          success: false,
+          error: true,
+        });
+      }
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  res.json({ received: true });
+}
+
+export async function getOrdersController(req, res) {
+  try {
+    const userId = req.userId;
+    const orders = await OrderModel.find({ userId: userId }).sort({
+      createdAt: -1,
+    });
+    return res.status(200).json({
+      message: 'Orders fetched successfully',
+      data: orders,
+      success: true,
+      error: false,
+    });
   } catch (error) {
     return res
       .status(500)
