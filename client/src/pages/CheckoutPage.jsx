@@ -3,13 +3,21 @@ import { useGlobalContext } from '../provider/globalProvider';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import AddAddress from '../components/AddAddress';
-
+import AxiosToastError from '../utils/AxiosToastError';
+import Axios from '../utils/Axios';
+import SummaryApi from '../common/SummartApi';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { date } from 'yup';
 const CheckoutPage = () => {
-  const { withoutDiscount, totalPrice, totalItems } = useGlobalContext();
+  const navigate = useNavigate();
+  const { withoutDiscount, totalPrice, totalItems, fetchCartItems } =
+    useGlobalContext();
   const cartItem = useSelector((state) => state?.cartProduct?.cartProduct);
   const [openAddress, setOpenAddress] = useState(false);
   const addresslist = useSelector((state) => state?.addresses?.address);
   const [selectedAddress, setselectedAddress] = useState(0);
+  const cartItemList = useSelector((state) => state?.cartProduct?.cartProduct);
 
   const DisplayPriceInRupees = (price) => {
     const formattedPrice = new Intl.NumberFormat('en-IN', {
@@ -28,6 +36,38 @@ const CheckoutPage = () => {
       </span>
     );
   };
+  const handleCashOnDelivery = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.CashOnDelivery,
+        data: {
+          list_items: cartItemList,
+          deliveryAddress: addresslist[selectedAddress]?._id,
+          totalAmt: totalPrice,
+          subTotalAmt: totalPrice,
+        },
+      });
+      const { data: responseData } = response;
+      if (responseData.success) {
+        toast.success(responseData.message);
+        if (fetchCartItems) {
+          fetchCartItems();
+        }
+        console.log('response', responseData);
+
+        navigate('/success', {
+          state: {
+            text: 'success',
+            responseData: responseData,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      
+      AxiosToastError(error);
+    }
+  };
 
   return (
     <section className='bg-gray-100 min-h-screen p-4'>
@@ -43,6 +83,7 @@ const CheckoutPage = () => {
             {addresslist?.length > 0 ? (
               addresslist.map((item, index) => (
                 <label
+                  key={index}
                   className={`${!item?.status && 'hidden'}`}
                   htmlFor={'item' + index}>
                   <div
@@ -164,7 +205,9 @@ const CheckoutPage = () => {
           <button className='w-full max-w-md py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition'>
             Online Payment
           </button>
-          <button className='w-full max-w-md py-3 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition'>
+          <button
+            onClick={handleCashOnDelivery}
+            className='w-full max-w-md py-3 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-900 transition'>
             Cash on Delivery
           </button>
         </div>

@@ -150,5 +150,9 @@ const SummaryApi = {
     url: '/api/address/delete-address',
     method: 'put',
   },
+  CashOnDelivery: {
+    url: '/api/order/cash-on-delivery',
+    method: 'post',
+  },
 };
 export default SummaryApi;
