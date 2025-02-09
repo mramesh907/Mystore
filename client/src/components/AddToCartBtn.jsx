@@ -56,23 +56,41 @@ const AddToCartBtn = ({ data }) => {
     setQuantity(productQuantity?.quantity);
     setCartItemDetails(productQuantity);
   }, [data, cartItem]);
-  const incrementQuantity = (e) => {
+  const incrementQuantity = async(e) => {
     e.preventDefault();
     e.stopPropagation();
     // console.log('cartItemDetails?._id', cartItemDetails?._id);
 
-    handleUpdateItemQty(cartItemDetails?._id, quantity + 1);
+    // Optimistically update quantity in UI
+    setQuantity((prev) => prev + 1);
+    try {
+     await handleUpdateItemQty(cartItemDetails?._id, quantity + 1);
     toast.success('Item added to cart');
+    } catch (error) {
+      console.log(error);
+      AxiosToastError(error);
+      setQuantity((prev) => prev - 1);
+      toast.error('Failed to update cart');
+    }
+    // handleUpdateItemQty(cartItemDetails?._id, quantity + 1);
   };
-  const decrementQuantity = (e) => {
+  const decrementQuantity = async(e) => {
     e.preventDefault();
     e.stopPropagation();
     if (quantity === 1) {
-      handleDeleteItem(cartItemDetails?._id);
+     await handleDeleteItem(cartItemDetails?._id);
       return;
     } else {
-      handleUpdateItemQty(cartItemDetails?._id, quantity - 1);
-      toast.success('Item removed from cart');
+      setQuantity((prev) => prev - 1);
+      try {
+       await handleUpdateItemQty(cartItemDetails?._id, quantity - 1);
+        toast.success('Item removed from cart');
+      } catch (error) {
+        // Rollback if API fails
+        setQuantity((prev) => prev - 1);
+        toast.error('Failed to update cart');
+      }
+      
     }
   };
   return (
