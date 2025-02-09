@@ -38,7 +38,8 @@ const AddToCartBtn = ({ data }) => {
       }
     } catch (error) {
       console.log('error', error);
-      AxiosToastError(error);
+      // AxiosToastError('Something went wrong');
+      toast.error('Something went wrong. Login to continue');
     } finally {
       setLoading(false);
     }
