@@ -2,12 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummartApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProduct } from '../store/cartProduct';
+import { addProduct, clearCart } from '../store/cartProduct';
 import AxiosToastError from '../utils/AxiosToastError';
 import toast from 'react-hot-toast';
 import { priceDiscount } from '../utils/PriceDiscount';
-import { setAddress } from '../store/addressSlice';
-import { addOrder } from '../store/orderSlice';
+import { setAddress, clearAddress } from '../store/addressSlice';
+import { addOrder,clearOrders } from '../store/orderSlice';
 export const GlobalContext = createContext();
 
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -64,7 +64,8 @@ export const GlobalProvider = ({ children }) => {
         fetchCartItems();
       }
     } catch (error) {
-      AxiosToastError(error);
+      // AxiosToastError(error);
+      console.log(error);
     }
   };
   const fetchaddress = async()=>{
@@ -77,7 +78,7 @@ export const GlobalProvider = ({ children }) => {
         dispatch(setAddress(responseData.data))
       }
     } catch (error) {
-      AxiosToastError(error)
+      // AxiosToastError(error)
     }
   }
   const fetchOrder = async () => {
@@ -95,9 +96,17 @@ export const GlobalProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchCartItems();
-    fetchaddress()
-    fetchOrder();
+    if(!user) {
+      dispatch(clearCart())
+      dispatch(clearAddress())
+      dispatch(clearOrders())
+      localStorage.clear()
+      sessionStorage.clear()
+    }else{
+      fetchCartItems();
+      fetchaddress()
+      fetchOrder();
+    }
   }, [user]);
   useEffect(() => {
     const totalItems = cartItem.reduce(
