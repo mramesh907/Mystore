@@ -75,7 +75,7 @@ export const GlobalProvider = ({ children }) => {
       })
       const {data : responseData} = response
       if(responseData.success){
-        dispatch(setAddress(responseData.data))
+        dispatch(setAddress(responseData.data));
       }
     } catch (error) {
       // AxiosToastError(error)

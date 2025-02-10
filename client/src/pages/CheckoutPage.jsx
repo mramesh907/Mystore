@@ -37,6 +37,10 @@ const CheckoutPage = () => {
     );
   };
   const handleCashOnDelivery = async () => {
+    if (!addresslist?.length) {
+      toast.error('Please add a billing address before proceeding.');
+      return;
+    }
     try {
       const response = await Axios({
         ...SummaryApi.CashOnDelivery,
@@ -64,11 +68,19 @@ const CheckoutPage = () => {
       }
     } catch (error) {
       console.log(error);
-      
-      AxiosToastError(error);
+      AxiosToastError(error?.message);
+      navigate('/cancel', {
+        state: {
+          text: 'cancel',
+        },
+      });
     }
   };
   const handleOnlinePayment = async () => {
+    if (!addresslist?.length) {
+      toast.error('Please add a billing address before proceeding.');
+      return;
+    }
     try {
       toast.loading('Redirecting to payment page...');
       const VITE_STRIPE_PUBLISHABLE_KEY = import.meta.env
@@ -87,7 +99,7 @@ const CheckoutPage = () => {
       stripe.redirectToCheckout({ sessionId: responseData.id });
     } catch (error) {
       console.log(error);
-      
+      toast.dismiss();
       AxiosToastError(error);
     }
   };
