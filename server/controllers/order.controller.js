@@ -19,7 +19,6 @@ export const CashOnDeliveryController = async (req, res) => {
         .status(400)
         .json({ message: 'Provide all fields', success: false, error: true });
     }
-    console.log(list_items);
 
     const payload = list_items.map((item) => ({
       userId: userId,
@@ -61,6 +60,23 @@ export const CashOnDeliveryController = async (req, res) => {
       return res
         .status(400)
         .json({ message: 'Something went wrong', success: false, error: true });
+    }
+    // Extract order IDs
+    const orderIds = order.map((ord) => ord._id);
+
+    // Update user order history
+    const userUpdate = await UserModel.findByIdAndUpdate(
+      userId,
+      { $push: { orderHistory: { $each: orderIds } } }, // Push orderIds to orderHistory array
+      { new: true }
+    );
+
+    if (!userUpdate) {
+      return res.status(400).json({
+        message: 'Failed to update order history',
+        success: false,
+        error: true,
+      });
     }
 
     const removeCart = await CartProductModel.deleteMany({ userId: userId });
@@ -204,6 +220,17 @@ export async function webhookStripe(req, res) {
         payment_status: session.payment_status,
       });
       const order = await OrderModel.insertMany(orderProduct);
+      if (order.length > 0) {
+        // Extract Order IDs
+        const orderIds = order.map((ord) => ord._id);
+
+        // Update orderHistory in UserModel
+        await UserModel.findByIdAndUpdate(
+          userId,
+          { $push: { orderHistory: { $each: orderIds } }},
+          { new: true }
+        );
+      }
       if (Boolean(order[0])) {
         const removeCartItems = await UserModel.findByIdAndUpdate(userId, {
           shoppingCart: [],
@@ -242,5 +269,71 @@ export async function getOrdersController(req, res) {
     return res
       .status(500)
       .json({ message: error.message || error, success: false, error: true });
+  }
+}
+
+export async function cancelOrderController(req, res) {
+  try {
+    const userId = req.userId; // Get logged-in user ID
+    const { orderId } = req.body; // Order ID from request body
+    if (!userId) {
+      return res.status(400).json({
+        message: 'User ID is required',
+        success: false,
+        error: true,
+      });
+    }
+    if (!orderId) {
+      return res.status(400).json({
+        message: 'Order ID is required',
+        success: false,
+        error: true,
+      });
+    }
+    // Find the order
+    const order = await OrderModel.findOne({
+      userId: userId,
+      orderId: orderId,
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        message: 'Order not found',
+        success: false,
+        error: true,
+      });
+    }
+
+    // Check if the order is already canceled
+    if (order.paymentStatus === 'CANCELED') {
+      return res.status(400).json({
+        message: 'Order is already canceled',
+        success: false,
+        error: true,
+      });
+    }
+
+    // Restore stock for the canceled order
+    const product = await ProductModel.findById(order.productId);
+    if (product) {
+      product.stock += 1; // Restore stock
+      await product.save();
+    }
+
+    // Update order status to CANCELED
+    order.paymentStatus = 'CANCELED';
+    await order.save();
+
+    return res.status(200).json({
+      message: 'Order canceled successfully',
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || 'Something went wrong',
+      success: false,
+      error: true,
+    });
   }
 }

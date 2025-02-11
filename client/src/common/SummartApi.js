@@ -161,5 +161,9 @@ const SummaryApi = {
     url: '/api/order/get-order',
     method: 'get',
   },
+  cancelOrder: {
+    url: '/api/order/cancel-order',
+    method: 'post',
+  },
 };
 export default SummaryApi;

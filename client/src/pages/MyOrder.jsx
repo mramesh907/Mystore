@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
+import toast from 'react-hot-toast';
+import Axios from '../utils/Axios';
+import SummaryApi from '../common/SummartApi';
+import CofirmBox from '../components/ConfirmBox';
+import NoData from '../components/NoData';
 const MyOrder = () => {
   const orders = useSelector((state) => state.oders.order);
-  // console.log('order', orders);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const DisplayPriceInRupees = (price) => {
     const formattedPrice = new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -21,12 +27,39 @@ const MyOrder = () => {
       </span>
     );
   };
+  const showCancelConfirmation = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowConfirm(true);
+  };
+  const handleCancelOrder = async () => {
+    if (!selectedOrderId) return;
+    try {
+      const response = await Axios({
+        ...SummaryApi.cancelOrder,
+        data: {
+          orderId: selectedOrderId,
+        },
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // Close ConfirmBox
+        setShowConfirm(false);
+        setSelectedOrderId(null);
+      } else {
+        toast.error(response.data.message || 'Failed to cancel order.');
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to cancel order.');
+    }
+  };
   return (
     <div className='p-6 max-w-7xl mx-auto'>
       <h2 className='text-3xl font-bold mb-6 text-gray-800'>My Orders</h2>
 
       {orders.length === 0 ? (
-        <p className='text-gray-500 text-lg'>No orders found.</p>
+        // <p className='text-gray-500 text-lg'>No orders found.</p>
+        <NoData />
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {orders.map((order) => (
@@ -70,10 +103,28 @@ const MyOrder = () => {
                     {order.paymentStatus.toUpperCase()}
                   </span>
                 </div>
+
+                {/* Cancel Order Button */}
+                {/* Cancel Order Button */}
+                {order.paymentStatus !== 'CANCELED' && (
+                  <button
+                    onClick={() => showCancelConfirmation(order.orderId)}
+                    className='mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full transition duration-200'>
+                    Cancel Order
+                  </button>
+                )}
               </div>
             </div>
           ))}
         </div>
+      )}
+      {/* Confirm Box Modal */}
+      {showConfirm && (
+        <CofirmBox
+          cancel={() => setShowConfirm(false)}
+          confirm={handleCancelOrder}
+          close={() => setShowConfirm(false)}
+        />
       )}
     </div>
   );

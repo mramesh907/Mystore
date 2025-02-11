@@ -33,7 +33,7 @@ const Home = () => {
           />
           <img
             src={bannerMobile}
-            className='w-full h-[30vh] lg:hidden'
+            className='w-full h-[35vh] lg:hidden'
             alt='bannerMobile'
           />
         </div>

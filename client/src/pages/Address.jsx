@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
 import { useGlobalContext } from '../provider/globalProvider';
 import Axios from '../utils/Axios';
+import NoData from '../components/NoData.jsx';
 const Address = () => {
   const { fetchaddress } = useGlobalContext();
   const addresslist = useSelector((state) => state?.addresses?.address);
@@ -77,7 +78,8 @@ const Address = () => {
               </div>
             ))
           ) : (
-            <p className='text-gray-500 mt-2'>No address found.</p>
+            // <p className='text-gray-500 mt-2'>No address found.</p>
+            <NoData />
           )}
         </div>
 
