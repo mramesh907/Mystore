@@ -9,7 +9,7 @@ const orderSlice = createSlice({
   initialState: initialValue,
   reducers: {
     addOrder: (state, action) => {
-      state.order = [...action.payload];
+      state.order = action.payload;
     },
     clearOrders: (state) => {
       state.order = []; // Clear cart on logout

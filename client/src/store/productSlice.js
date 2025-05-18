@@ -12,14 +12,14 @@ const productSlice = createSlice({
     initialState: initialValue,
     reducers: {
         setAllCategory : (state,action) => {
-            state.allCategory = [...action.payload];
+            state.allCategory =action.payload;
         },
         setLoadingCategory : (state,action) => {
             state.loadingCategory = action.payload
         }
         ,
         setAllSubCategory : (state,action)=>{
-            state.allSubCategory = [...action.payload];
+            state.allSubCategory =action.payload;
         }
         // setSubCategory : (state,action) => {
         //     state.subCategory = action.payload;

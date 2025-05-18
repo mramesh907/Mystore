@@ -8,7 +8,7 @@ const cartProductSlice = createSlice({
   initialState: initialValue,
   reducers: {
     addProduct: (state, action) => {
-      state.cartProduct = [...action.payload];
+      state.cartProduct =action.payload;
     },
     clearCart: (state) => {
       state.cartProduct = []; // Clear cart on logout

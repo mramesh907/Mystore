@@ -8,7 +8,7 @@ const addressSlice = createSlice({
   initialState: initialValue,
   reducers: {
     setAddress(state, action) {
-      state.address = [...action.payload];
+      state.address =action.payload;
     },
     clearAddress(state) {
       state.address = []; // Clear cart on logout
